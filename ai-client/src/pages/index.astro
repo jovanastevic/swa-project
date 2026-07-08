@@ -1,0 +1,18 @@
+---
+import {PromptCard} from '../components/PromptCard.tsx';
+import Layout from '../layouts/Layout.astro';
+import {api} from '../lib/api.ts';
+const prompts = await api.getPrompts();
+// const prompts = await res.json();
+---
+<!-- all prompts are displayed on the homepage, getPrompts is returning an array of prompts -->
+<Layout>
+    <main class="flex flex-col items-center min-h-screen p-4 space-y-2">
+        {prompts.map((prompt) => (
+                <div class="w-full">
+                <PromptCard client:only="react" prompt={prompt}/>
+                </div>
+        ))
+        }
+    </main>
+</Layout>

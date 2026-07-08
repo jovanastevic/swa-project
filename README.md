@@ -1,7 +1,7 @@
 # Actual Intelligence (AI) - SWA Semesterprojekt
 
 ## TODO:
-- Kurzbeschreibung des Projekts [] - Verena
+- Kurzbeschreibung des Projekts [X] - Verena
 - Presentation Layer - UML [X] - Sadi
 - Presentation Layer - Mockups [] - Verena
 - Business Layer - UML (inkl Navigabilität, Kardinalität und Zugriffsmodifier) [] - Sadi

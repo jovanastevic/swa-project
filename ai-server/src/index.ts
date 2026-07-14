@@ -7,7 +7,7 @@ import {createServer} from "node:http";  // <- Creates a HTTP server
 import {WebSocketServer} from "ws"; // <- WebSocket server for real-time communication
 
 // Import controllers
-import {UserController} from "./controller/UserController";
+import {AuthController} from "./controller/AuthController";
 
 // Servers initialization
 const app = express();
@@ -15,7 +15,7 @@ const server = createServer(app);
 const wss = new WebSocketServer({server});
 
 // Initialize controllers
-UserController.init(app);
+AuthController.init(app);
 
 app.use(express.json());
 //app.use(cookieParser());

@@ -1,0 +1,26 @@
+### register a new User
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "username": "Test",
+  "password": "1234",
+  "email": "dajdj@gmail.com",
+  "profile_description": "Jovana leck Eier!"
+}
+
+### Login User
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "username": "Test",
+  "password": "1234"
+}
+
+> {%
+    var setCookie = response.headers.valueOf("Set-Cookie");
+    var cleanCookie = setCookie.split(";")[0];
+    client.global.set("auth_cookie", cleanCookie);
+    client.log("Cookie gesetzt: " + cleanCookie);
+%}

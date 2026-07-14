@@ -14,9 +14,6 @@ const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({server});
 
-// Initialize controllers
-AuthController.init(app);
-
 app.use(express.json());
 //app.use(cookieParser());
 app.use(express.static("public")); //nur für den test WS
@@ -24,6 +21,9 @@ app.use(cors({
     origin: 'http://localhost:4321',
     credentials: true
 }));
+
+// Initialize controllers
+AuthController.init(app);
 
 
 server.listen(3000, () => {

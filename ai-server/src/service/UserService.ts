@@ -11,7 +11,6 @@ export class UserService {
             const existingUser = await UserService.getByUsername(user.username);
             // Throw conflict if user already exists
             if (existingUser) return 'conflict';
-            if (existingUser === 'error') return 'error';
             // Proper Hashing of the password
             user.password = await hash(user.password, 12);
 
@@ -32,7 +31,7 @@ export class UserService {
     static async getByUsername(username: string): Promise<IUserData | undefined | 'error'> {
         try {
             const [rows] = await DB.query<RowDataPacket[]>(
-                'select username, email, profileDescription from user where username = ?',
+                'select username, email, profile_description from user where username = ?',
                         [username]);
 
             if (!rows || rows.length === 0) {

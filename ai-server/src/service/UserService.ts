@@ -5,36 +5,23 @@ import {ResultSetHeader, RowDataPacket} from "mysql2";
 
 export class UserService {
 
-    static async createUser(user: IUser): Promise<'conflict' | 'created' | 'error' | 'ServerError'> {
-        // Check if Username already exists
-        const existingUser = await UserService.getByUsername(user.username);
-        // Throw conflict if user already exists
-        if (existingUser) return 'conflict';
-
-        // Proper Hashing of the password
-        user.password = await UserService.hashPassword(user.password);
-
-        if (user.password === 'ServerError') return 'ServerError';
-
-        // Insert user into database
+    static async createUser(user: IUser): Promise<'conflict' | 'created' | 'error'> {
         try {
+            // Check if Username already exists
+            const existingUser = await UserService.getByUsername(user.username);
+            // Throw conflict if user already exists
+            if (existingUser) return 'conflict';
+            if (existingUser === 'error') return 'error';
+            // Proper Hashing of the password
+            user.password = await hash(user.password, 12);
+
+            // Insert user into database
             const [inserted] = await DB.execute<ResultSetHeader>(
-                'insert into user(username, password, email, profileDescription) values(?, ?, ?, ?)',
+                'insert into user(username, password, email, profile_description) values(?, ?, ?, ?)',
                         [user.username, user.password, user.email, user.profile_description]);
 
             if (inserted.affectedRows < 1) return 'error';
             return 'created';
-        } catch (e) {
-            console.error(e);
-            return 'error';
-        }
-    }
-
-    // Hash function
-    static async hashPassword(plainTextPassword: string): Promise<string|'ServerError'> {
-        try {
-            const hashedPassword = await hash(plainTextPassword, 12);
-            return hashedPassword;
         } catch (e) {
             console.error(e);
             return 'error';

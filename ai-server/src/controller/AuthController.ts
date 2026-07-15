@@ -1,7 +1,7 @@
 import {Express, Request, Response} from 'express';
 import {UserLogin, User} from '../interface/User';
 import {UserService} from '../service/UserService';
-import {generateToken} from '../middleware/auth';
+import {generateTokenAccessToken, generateTokenRefreshToken} from '../middleware/auth';
 
 // TODO: Kommentare Schreiben & auth middleware checken sowie die Logout route implementieren
 export class AuthController {
@@ -24,13 +24,25 @@ export class AuthController {
             res.status(401).send();
             return
         }
-        const payload = {username: data.data.username};
-        const token = generateToken(payload);
-        res.cookie('auth_token', token, {
+        const AcTpayload = {username: data.data.username, role: 'user'};
+        const AccessToken = generateTokenAccessToken(AcTpayload);
+
+        const ReTpayload = {username: data.data.username};
+        const RefreshToken = generateTokenRefreshToken(ReTpayload);
+
+        res.cookie('accessToken', AcTpayload, {
             httpOnly: true,
             secure: false,
-            sameSite: 'lax',
-            maxAge: 1000 * 60 * 60 * 24
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000 // 15 Minuten
+        });
+
+        res.cookie('refreshToken', RefreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            path: '/api/refresh', // Only sent to refresh endpoint || ist noch von einer Toturial Webseite muss ich mir noch anschauen was das ist
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
 
         res.json({

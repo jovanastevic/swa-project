@@ -9,8 +9,10 @@ export class UserService {
         try {
             // Check if Username already exists
             const existingUser = await UserService.getByUsername(user.username);
+
             // Throw conflict if user already exists
             if (existingUser) return 'conflict';
+
             // Proper Hashing of the password
             user.password = await hash(user.password, 12);
 

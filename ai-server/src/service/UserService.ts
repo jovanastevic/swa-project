@@ -2,6 +2,7 @@ import {IUser, IUserData, IUserLogin, UserData} from "../interface/User";
 import {compare, hash} from "bcrypt";
 import {DB} from "../middleware/db";
 import {ResultSetHeader, RowDataPacket} from "mysql2";
+import z from "zod";
 
 export class UserService {
 
@@ -36,7 +37,8 @@ export class UserService {
 
         // NEU: Wenn die Datenbank kaputte Daten liefert, werfen wir einen Fehler!
         if (!parsed.success) {
-            throw new Error(`Datenbank-Korruption bei User ${username}: ${parsed.error.message}`);
+            console.error("Zod Validierungsfehler bei getByUsername:", z.treeifyError(parsed.error));
+            throw new Error("Datenbank-Einträge entsprechen nicht dem User-Schema");
         }
 
         return parsed.data;

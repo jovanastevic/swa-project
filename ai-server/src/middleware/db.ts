@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'test') {
     dotenv.config(); // Normaler Start -> Lade Entwicklungs-DB
 }
 
-// 2. Den Pool mit den geladenen Variablen erstellen
+// Den Pool mit den geladenen Variablen erstellen
 export const DB = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,

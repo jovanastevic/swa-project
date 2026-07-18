@@ -11,18 +11,12 @@ const testUser = {
     profile_description: "Das ist ein Testprofil"
 };
 
-
 let savedRefreshTokenCookie: string;
 
 describe('Auth Flow Integration Tests', () => {
 
-    // WICHTIG: beforeAll statt beforeEach!
-    // Die Datenbank wird nur EINMAL vor dem allerersten Test geleert.
     beforeAll(async () => {
-        // Umgebungsvariablen für die JWT-Secrets setzen (falls sie in der Test-Umgebung fehlen)
-        // WICHTIG: Wenn du in deinem Controller das Secret beim Login nicht fixt,
-        // mach hier beide Secrets vorerst identisch, sonst schlägt der Test fehl!
-
+        // Die Datenbank wird nur EINMAL vor dem allerersten Test geleert.
         await clearTestDatabase();
     });
 
@@ -38,6 +32,7 @@ describe('Auth Flow Integration Tests', () => {
             .send(testUser);
 
         expect(response.status).toBe(201);
+        expect(response.body.message).toBe('User created successfully');
     });
 
     it('2. sollte bei erneuter Registrierung des gleichen Users fehlschlagen (Status 409)', async () => {
@@ -46,6 +41,7 @@ describe('Auth Flow Integration Tests', () => {
             .send(testUser);
 
         expect(response.status).toBe(409);
+        expect(response.body.message).toBe('Username already exists');
     });
 
     // --- 2. LOGIN ---
@@ -73,10 +69,9 @@ describe('Auth Flow Integration Tests', () => {
         expect(hasRefreshToken).toBe(true);
 
         // Wir speichern den kompletten String des Refresh-Cookies für den nächsten Test
-        // Test 3 anpassen:
         savedRefreshTokenCookie = cookies
             .find((c: string) => c.startsWith('refreshToken='))
-            ?.split(';')[0] as string; // <--- Das split() ist neu!
+            ?.split(';')[0] as string;
     });
 
     it('4. sollte beim Login mit falschem Passwort abweisen (Status 401)', async () => {
@@ -88,6 +83,7 @@ describe('Auth Flow Integration Tests', () => {
             });
 
         expect(response.status).toBe(401);
+        expect(response.body.message).toBe('Invalid Credentials');
     });
 
     // --- 3. REFRESH TOKEN ---
@@ -95,8 +91,6 @@ describe('Auth Flow Integration Tests', () => {
         const response = await request(app)
             .post('/refresh')
             .set('Cookie', savedRefreshTokenCookie); // Hier hängen wir das gemerkte Cookie an!
-
-        console.log("GRUND FÜR 401:", response.body);
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Token refreshed successfully');
@@ -125,7 +119,6 @@ describe('Auth Flow Integration Tests', () => {
         expect(response.body.message).toBe('Logged out successfully');
 
         // Checken ob express.clearCookie() richtig aufgerufen wurde.
-        // Express leert Cookies, indem das Ablaufdatum in die Vergangenheit gesetzt wird (bzw. leerer Wert)
         const cookies = response.headers['set-cookie'] as unknown as string[];
         expect(cookies).toBeDefined();
 

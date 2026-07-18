@@ -4,7 +4,7 @@ export const User = z.object({
     username: z.string(),
     password: z.string(),
     email: z.email(),
-    profile_description: z.string() || z.null(),
+    profile_description: z.string().or(z.null()),
 });
 
 export const UserData = z.object({
@@ -17,6 +17,10 @@ export const UserLogin = z.object({
     username: z.string(),
     password: z.string(),
 });
+
+export interface ITokenPayload {
+    username : string;
+}
 
 export type IUser = z.infer<typeof User>;
 export type IUserData = z.infer<typeof UserData>;

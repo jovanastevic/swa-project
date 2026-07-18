@@ -3,18 +3,23 @@ import {compare, hash} from "bcrypt";
 import {DB} from "../middleware/db";
 import {ResultSetHeader, RowDataPacket} from "mysql2";
 
-// TODO: Kommentare schreiben
 export class UserService {
+
     static async createUser(user: IUser): Promise<'conflict' | 'created' | 'error'> {
-        const existingUser = await UserService.getByUsername(user.username);
-
-        if (existingUser) return 'conflict';
-
-        // TODO: Da gehört noch richtiges Hashing rein
-        user.password = await hash(user.password, 10);
-
         try {
-            const [inserted] = await DB.execute<ResultSetHeader>('insert into user(username, password, email, profileDescription) values(?, ?, ?, ?)', [user.username, user.password, user.email, user.profile_description]);
+            // Check if Username already exists
+            const existingUser = await UserService.getByUsername(user.username);
+
+            // Throw conflict if user already exists
+            if (existingUser) return 'conflict';
+
+            // Proper Hashing of the password
+            user.password = await hash(user.password, 12);
+
+            // Insert user into database
+            const [inserted] = await DB.execute<ResultSetHeader>(
+                'insert into user(username, password, email, profile_description) values(?, ?, ?, ?)',
+                        [user.username, user.password, user.email, user.profile_description]);
 
             if (inserted.affectedRows < 1) return 'error';
             return 'created';
@@ -24,9 +29,12 @@ export class UserService {
         }
     }
 
+    // Get user by username
     static async getByUsername(username: string): Promise<IUserData | undefined | 'error'> {
         try {
-            const [rows] = await DB.query<RowDataPacket[]>('select username, email, profileDescription from user where username = ?', [username]);
+            const [rows] = await DB.query<RowDataPacket[]>(
+                'select username, email, profile_description from user where username = ?',
+                        [username]);
 
             if (!rows || rows.length === 0) {
                 return undefined;
@@ -39,14 +47,17 @@ export class UserService {
         }
     }
 
-    static async validatePassword(data: IUserLogin): Promise<boolean> {
-        const [rows] = await DB.query<RowDataPacket[]>('select password from user where username = ?', [data.username]);
+    // Check if the password is correct for the given username
+    static async validatePassword(LoginData: IUserLogin): Promise<boolean> {
+        const [rows] = await DB.query<RowDataPacket[]>(
+            'select password from user where username = ?',
+                    [LoginData.username]);
 
         if (rows && rows.length === 0) {
             return false;
         }
 
-        const oldPasswordHash = rows[0].password;
-        return await compare(data.password, oldPasswordHash);
+        const dataBankPassword = rows[0].password;
+        return await compare(LoginData.password, dataBankPassword);
     }
 }

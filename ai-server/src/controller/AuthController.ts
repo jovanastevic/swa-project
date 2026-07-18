@@ -34,7 +34,7 @@ export class AuthController {
 
         const RefreshToken = jwt.sign(
             {username: data.data.username},
-            process.env.JWT_SECRET!,
+            process.env.REFRESH_TOKEN_SECRET!,
             {expiresIn: '7d'});
 
         // setting the access token and refresh token in cookies
@@ -63,6 +63,7 @@ export class AuthController {
         const data = User.safeParse(req.body); // parse the request body in (username, password, email) format
 
         if (!data.success) {
+            console.log("ZOD ERROR:", data.error);
             res.status(400).json({
                 message: 'Wrong input data',
                 errors: data.error

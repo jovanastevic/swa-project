@@ -8,8 +8,9 @@
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "./src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "types": ["jest"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules", "dist"]
 }

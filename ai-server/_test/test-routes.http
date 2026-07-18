@@ -6,7 +6,7 @@ Content-Type: application/json
   "username": "Test",
   "password": "1234",
   "email": "dajdj@gmail.com",
-  "profile_description": "Jovana leck Eier!"
+  "profile_description": "Jovana stinkt!"
 }
 
 ### Login User
@@ -17,10 +17,3 @@ Content-Type: application/json
   "username": "Test",
   "password": "1234"
 }
-
-> {%
-    var setCookie = response.headers.valueOf("Set-Cookie");
-    var cleanCookie = setCookie.split(";")[0];
-    client.global.set("auth_cookie", cleanCookie);
-    client.log("Cookie gesetzt: " + cleanCookie);
-%}

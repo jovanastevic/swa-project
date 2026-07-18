@@ -1,18 +1,9 @@
 import jwt from 'jsonwebtoken';
 import {Request, Response, NextFunction } from 'express';
+import {ITokenPayload} from "../interface/User";
 
-interface ITokenPayload {
-    username : string;
-}
 
-export function generateTokenAccessToken(payload: ITokenPayload):string {
-    return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '15min'});
-}
-
-export function generateTokenRefreshToken(payload: ITokenPayload):string {
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: '7d'});
-}
-
+// just checking if the access token is valid or not.
 export function validateAuth(req: Request, res: Response, next: NextFunction) {
     try{
         const token = req.cookies.accessToken;

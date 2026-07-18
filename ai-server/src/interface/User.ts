@@ -18,6 +18,10 @@ export const UserLogin = z.object({
     password: z.string(),
 });
 
+export interface ITokenPayload {
+    username : string;
+}
+
 export type IUser = z.infer<typeof User>;
 export type IUserData = z.infer<typeof UserData>;
 export type IUserLogin = z.infer<typeof UserLogin>;

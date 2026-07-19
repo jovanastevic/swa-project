@@ -37,7 +37,7 @@ export class UserService {
 
         // NEU: Wenn die Datenbank kaputte Daten liefert, werfen wir einen Fehler!
         if (!parsed.success) {
-            console.error("Zod Validierungsfehler bei getByUsername:", JSON.stringify(z.treeifyError(parsed.error), null, 2));
+            console.error("Zod Validierungsfehler bei getByUsername:", JSON.stringify(parsed.error.issues, null, 2));
             throw new Error("Datenbank-Einträge entsprechen nicht dem User-Schema");
         }
 

@@ -12,7 +12,7 @@ export class PromptService {
         const parsed = z.array(Prompt).safeParse(prompts);
 
         if (!parsed.success) {
-            console.error("Zod Validierungsfehler bei getAllPrompts:", JSON.stringify(z.treeifyError(parsed.error), null, 2));
+            console.error("Zod Validierungsfehler bei getAllPrompts:", JSON.stringify(parsed.error.issues, null, 2));
             throw new Error("Datenbank-Einträge entsprechen nicht dem Prompt-Schema");
         }
         return parsed.data;
@@ -28,7 +28,7 @@ export class PromptService {
         const parsed = Prompt.safeParse(rows[0]);
 
         if (!parsed.success) {
-            console.error("Zod Validierungsfehler bei getPromptById:", JSON.stringify(z.treeifyError(parsed.error), null, 2));
+            console.error("Zod Validierungsfehler bei getPromptById:", JSON.stringify(parsed.error.issues, null, 2));
             throw new Error(`Prompt mit ID ${Id} konnte nicht validiert werden.`);
         }
         return parsed.data;

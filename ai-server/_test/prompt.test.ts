@@ -81,7 +81,7 @@ describe('Prompt Flow Integration Tests', () => {
                 });
 
             expect(response.status).toBe(400);
-            expect(response.body.message).toBe('Failed to create prompt or Catagory does not exist');
+            expect(response.body.message).toBe('Failed to create prompt or Category does not exist');
         });
 
         it('4. sollte ohne Authentifizierung blockiert werden', async () => {

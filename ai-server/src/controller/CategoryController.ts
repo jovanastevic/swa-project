@@ -9,6 +9,7 @@ export class CategoryController {
 
     static async getAllCategories(req: Request, res: Response) {
         try{
+            // It is possible to get an empty array
             const categories = await CategoryService.getAllCategories();
 
             res.status(200).json(categories);

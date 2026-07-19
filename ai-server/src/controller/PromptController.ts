@@ -6,9 +6,9 @@ import z from "zod";
 
 export class PromptController {
     static init(app: Express): void {
-        app.get('/prompts/', PromptController.getAllPrompts);
+        app.get('/prompts', PromptController.getAllPrompts);
         app.get('/prompts/:id', PromptController.getPromptById);
-        app.post('/prompts/',validateAuth, PromptController.createPrompt);
+        app.post('/prompts',validateAuth, PromptController.createPrompt);
     }
 
     static async getAllPrompts(req: Request, res: Response) {
@@ -53,7 +53,7 @@ export class PromptController {
                 res.status(400).json({
                     message: 'Missing or invalid fields',
                     errors: z.treeifyError(data.error)
-                }); // worng input data
+                });
                 return;
             }
 

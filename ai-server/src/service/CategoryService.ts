@@ -14,7 +14,8 @@ export class CategoryService {
         const parsed = z.array(Category).safeParse(categories);
 
         if (!parsed.success) {
-            console.error("Zod Validierungsfehler bei getAllCategories:", JSON.stringify(parsed.error.issues, null, 2));
+            console.error("Zod Validierungsfehler bei getAllCategories:",
+                JSON.stringify(parsed.error.issues, null, 2)); // format the error nicely
             throw new Error(`Category-Daten konnten nicht validiert werden.`);
         }
         return parsed.data;

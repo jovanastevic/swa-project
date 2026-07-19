@@ -59,7 +59,7 @@ export class PromptController {
 
             const result = await PromptService.createPrompt(data.data, username);
             if (!result) {
-                res.status(400).json({message: 'Failed to create prompt or Catagory does not exist'});
+                res.status(400).json({message: 'Failed to create prompt or Category does not exist'});
                 return;
             }
             res.status(201).send();

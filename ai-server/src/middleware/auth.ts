@@ -16,6 +16,6 @@ export function validateAuth(req: Request, res: Response, next: NextFunction) {
         req.params._username = decoded.username;
         next();
     } catch {
-        res.status(401).json({message: "Invalid or expired token"});
+        return res.status(401).json({message: "Invalid or expired token"});
     }
 }

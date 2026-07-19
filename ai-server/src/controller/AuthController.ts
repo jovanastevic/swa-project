@@ -28,7 +28,7 @@ export class AuthController {
 
             if (!isValid) {
                 res.status(401).json({message: 'Invalid Credentials'});
-                return
+                return;
             }
 
             // genarte access token and refresh token
@@ -130,8 +130,8 @@ export class AuthController {
 
     static async logout(req: Request, res: Response) {
         try{
-            res.clearCookie('accessToken');
-            res.clearCookie('refreshToken', {path: '/refresh'}); // Clear the refresh token cookie
+            res.clearCookie('accessToken', { httpOnly: true, secure: false, sameSite: 'strict' });
+            res.clearCookie('refreshToken', { path: '/refresh', httpOnly: true, secure: true, sameSite: 'strict' }); // Clear the refresh token cookie
 
             res.json({message: 'Logged out successfully'});
         }catch (error){

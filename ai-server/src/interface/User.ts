@@ -4,13 +4,13 @@ export const User = z.object({
     username: z.string(),
     password: z.string(),
     email: z.email(),
-    profile_description: z.string().or(z.null()),
+    profile_description: z.string().nullable(),
 });
 
 export const UserData = z.object({
     username: z.string(),
     email: z.email(),
-    profile_description: z.string(),
+    profile_description: z.string().nullable(),
 });
 
 export const UserLogin = z.object({

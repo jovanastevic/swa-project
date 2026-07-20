@@ -6,7 +6,7 @@ import { RowDataPacket} from "mysql2";
 export class CategoryService {
     static async getAllCategories(): Promise<ICategory[]> {
         const [categories] = await DB.query<RowDataPacket[]>(
-            'select category_id, name, description from category');
+            'select category_id, title, description from category');
 
         if(!categories || categories.length === 0) {
             return [];

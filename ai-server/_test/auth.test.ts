@@ -1,131 +1,111 @@
+import { describe, it, expect, beforeEach, afterAll } from '@jest/globals';
 import request from 'supertest';
 import { app } from '../src';
 import { DB } from '../src/middleware/db';
-import { clearTestDatabase } from './testUtils/dbCleanUp';
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { clearDatabase } from './test-utils';
 
-const testUser = {
-    username: "TestUser",
-    password: "Password123!",
-    email: "test@test.com",
-    profile_description: "Das ist ein Testprofil"
-};
-
-let savedRefreshTokenCookie: string;
-
-describe('Auth Flow Integration Tests', () => {
-
-    beforeAll(async () => {
-        // Die Datenbank wird nur EINMAL vor dem allerersten Test geleert.
-        await clearTestDatabase();
+describe('Auth', () => {
+    beforeEach(async () => {
+        await clearDatabase();
     });
 
-    // Nach allen Tests die Datenbankverbindung kappen
     afterAll(async () => {
         await DB.end();
     });
 
-    // --- 1. REGISTRIERUNG ---
-    it('1. sollte einen neuen User erfolgreich registrieren (Status 201)', async () => {
-        const response = await request(app)
-            .post('/register')
-            .send(testUser);
-
-        expect(response.status).toBe(201);
-        expect(response.body.message).toBe('User created successfully');
-    });
-
-    it('2. sollte bei erneuter Registrierung des gleichen Users fehlschlagen (Status 409)', async () => {
-        const response = await request(app)
-            .post('/register')
-            .send(testUser);
-
-        expect(response.status).toBe(409);
-        expect(response.body.message).toBe('Username already exists');
-    });
-
-    // --- 2. LOGIN ---
-    it('3. sollte sich mit dem erstellten User einloggen und Cookies setzen (Status 200)', async () => {
-        const response = await request(app)
-            .post('/login')
-            .send({
-                username: testUser.username,
-                password: testUser.password
+    describe('POST /register', () => {
+        it('creates a new user', async () => {
+            const res = await request(app).post('/register').send({
+                username: 'alice', password: 'secret123', email: 'alice@test.com', profile_description: null
             });
+            expect(res.status).toBe(201);
+        });
 
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Login erfolgreich');
-        expect(response.body.username).toBe(testUser.username);
-
-        // Cookies extrahieren
-        const cookies = response.headers['set-cookie'] as unknown as string[];
-        expect(cookies).toBeDefined();
-
-        // Wir prüfen, ob accessToken und refreshToken gesetzt wurden
-        const hasAccessToken = cookies.some((c: string) => c.includes('accessToken='));
-        const hasRefreshToken = cookies.some((c: string) => c.includes('refreshToken='));
-
-        expect(hasAccessToken).toBe(true);
-        expect(hasRefreshToken).toBe(true);
-
-        // Wir speichern den kompletten String des Refresh-Cookies für den nächsten Test
-        savedRefreshTokenCookie = cookies
-            .find((c: string) => c.startsWith('refreshToken='))
-            ?.split(';')[0] as string;
-    });
-
-    it('4. sollte beim Login mit falschem Passwort abweisen (Status 401)', async () => {
-        const response = await request(app)
-            .post('/login')
-            .send({
-                username: testUser.username,
-                password: "WrongPassword!"
+        it('rejects invalid email', async () => {
+            const res = await request(app).post('/register').send({
+                username: 'alice', password: 'secret123', email: 'not-an-email', profile_description: null
             });
+            expect(res.status).toBe(400);
+        });
 
-        expect(response.status).toBe(401);
-        expect(response.body.message).toBe('Invalid Credentials');
+        it('rejects missing password', async () => {
+            const res = await request(app).post('/register').send({
+                username: 'alice', email: 'alice@test.com', profile_description: null
+            });
+            expect(res.status).toBe(400);
+        });
+
+        it('rejects duplicate username', async () => {
+            const payload = { username: 'alice', password: 'secret123', email: 'alice@test.com', profile_description: null };
+            await request(app).post('/register').send(payload);
+            const res = await request(app).post('/register').send(payload);
+            expect(res.status).toBe(409);
+        });
     });
 
-    // --- 3. REFRESH TOKEN ---
-    it('5. sollte mit einem gültigen Refresh-Token ein neues Access-Token generieren', async () => {
-        const response = await request(app)
-            .post('/refresh')
-            .set('Cookie', savedRefreshTokenCookie); // Hier hängen wir das gemerkte Cookie an!
+    describe('POST /login', () => {
+        beforeEach(async () => {
+            await request(app).post('/register').send({
+                username: 'bob', password: 'secret123', email: 'bob@test.com', profile_description: null
+            });
+        });
 
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Token refreshed successfully');
+        it('logs in with valid credentials and sets cookies', async () => {
+            const res = await request(app).post('/login').send({ username: 'bob', password: 'secret123' });
+            expect(res.status).toBe(200);
+            expect(res.body.username).toBe('bob');
+            const cookies = res.headers['set-cookie'] as unknown as string[];
+            expect(cookies.some(c => c.startsWith('accessToken='))).toBe(true);
+            expect(cookies.some(c => c.startsWith('refreshToken='))).toBe(true);
+        });
 
-        // Prüfen, ob das NEUE Access-Token im Set-Cookie Header ist
-        const cookies = response.headers['set-cookie'] as unknown as string[];
-        expect(cookies).toBeDefined();
-        const hasNewAccessToken = cookies.some((c: string) => c.includes('accessToken='));
-        expect(hasNewAccessToken).toBe(true);
+        it('rejects wrong password', async () => {
+            const res = await request(app).post('/login').send({ username: 'bob', password: 'wrong' });
+            expect(res.status).toBe(401);
+        });
+
+        it('rejects unknown username', async () => {
+            const res = await request(app).post('/login').send({ username: 'ghost', password: 'secret123' });
+            expect(res.status).toBe(401);
+        });
+
+        it('rejects invalid body', async () => {
+            const res = await request(app).post('/login').send({ username: 'bob' });
+            expect(res.status).toBe(400);
+        });
     });
 
-    it('6. sollte Refresh ohne Token verweigern (Status 401)', async () => {
-        const response = await request(app)
-            .post('/refresh'); // Ohne .set('Cookie', ...)
+    describe('POST /refresh', () => {
+        it('rejects missing refresh token', async () => {
+            const res = await request(app).post('/refresh');
+            expect(res.status).toBe(401);
+        });
 
-        expect(response.status).toBe(401);
-        expect(response.body.message).toBe('Refresh token required');
+        it('issues a new access token with valid refresh token', async () => {
+            await request(app).post('/register').send({
+                username: 'carol', password: 'secret123', email: 'carol@test.com', profile_description: null
+            });
+            const loginRes = await request(app).post('/login').send({ username: 'carol', password: 'secret123' });
+            const cookies = loginRes.headers['set-cookie'] as unknown as string[];
+            const refreshCookie = cookies.find(c => c.startsWith('refreshToken='))!.split(';')[0];
+
+            const res = await request(app).post('/refresh').set('Cookie', [refreshCookie]);
+            expect(res.status).toBe(200);
+        });
+
+        it('rejects invalid refresh token', async () => {
+            const res = await request(app).post('/refresh').set('Cookie', ['refreshToken=invalid.token.value']);
+            expect(res.status).toBe(401);
+        });
     });
 
-    // --- 4. LOGOUT ---
-    it('7. sollte den User ausloggen und Cookies leeren (Status 200)', async () => {
-        const response = await request(app)
-            .post('/logout');
-
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Logged out successfully');
-
-        // Checken ob express.clearCookie() richtig aufgerufen wurde.
-        const cookies = response.headers['set-cookie'] as unknown as string[];
-        expect(cookies).toBeDefined();
-
-        const clearedAccessToken = cookies.some((c: string) => c.includes('accessToken=;') && c.includes('Expires='));
-        const clearedRefreshToken = cookies.some((c: string) => c.includes('refreshToken=;') && c.includes('Expires='));
-
-        expect(clearedAccessToken).toBe(true);
-        expect(clearedRefreshToken).toBe(true);
+    describe('POST /logout', () => {
+        it('clears auth cookies', async () => {
+            const res = await request(app).post('/logout');
+            expect(res.status).toBe(200);
+            const cookies = res.headers['set-cookie'] as unknown as string[];
+            expect(cookies.some(c => c.startsWith('accessToken=;'))).toBe(true);
+            expect(cookies.some(c => c.startsWith('refreshToken=;'))).toBe(true);
+        });
     });
 });

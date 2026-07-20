@@ -11,6 +11,7 @@ import {WebSocketServer} from "ws"; // <- WebSocket server for real-time communi
 import {AuthController} from "./controller/AuthController";
 import {PromptController} from "./controller/PromptController";
 import {CategoryController} from "./controller/CategoryController";
+import {ChatroomController} from "./controller/ChatroomController";
 
 // Servers initialization
 const app = express();
@@ -29,6 +30,7 @@ app.use(cors({
 AuthController.init(app);
 PromptController.init(app);
 CategoryController.init(app);
+ChatroomController.init(app);
 
 /* // server listen off couse of jest
 server.listen(3000, () => {

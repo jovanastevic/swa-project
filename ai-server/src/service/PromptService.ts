@@ -19,6 +19,10 @@ export class PromptService {
                         'category c on ' +
                 'c.category_id = p.category_id');
 
+        if(!prompts || prompts.length === 0) {
+            return [];
+        }
+
         const parsed = z.array(Prompt).safeParse(prompts);
 
         if (!parsed.success) {

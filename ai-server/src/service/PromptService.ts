@@ -7,17 +7,10 @@ import {INewPrompt, IPrompt, Prompt} from "../interface/Prompt";
 export class PromptService {
     static async getAllPrompts(): Promise<IPrompt[]> {
         const [prompts] = await DB.query<RowDataPacket[]>(
-            'select ' +
-                'p.prompt_id, ' +
-                'p.category_id, ' +
-                'c.name, ' +
-                'p.username, ' +
-                'p.title, ' +
-                'p.description, ' +
-                'p.time_stamp ' +
-                    'from prompts p join ' +
-                        'category c on ' +
-                'c.category_id = p.category_id');
+            `select p.prompt_id, p.category_id, c.title, p.username, p.title, p.description, p.time_stamp 
+                    from prompts p join 
+                        category c on 
+                            c.category_id = p.category_id`);
 
         if(!prompts || prompts.length === 0) {
             return [];
@@ -34,19 +27,13 @@ export class PromptService {
 
     static async getPromptById(Id: number): Promise< undefined | IPrompt> {
         const [rows] = await DB.query<RowDataPacket[]>(
-            'select ' +
-                'p.prompt_id, ' +
-                'p.category_id, ' +
-                'c.name, ' +
-                'p.username, ' +
-                'p.title, ' +
-                'p.description, ' +
-                'p.time_stamp ' +
-                'from prompts p join ' +
-                    'category c on ' +
-                'c.category_id = p.category_id ' +
-            'WHERE p.prompt_id = ?',
+            `select p.prompt_id, p.category_id, c.title, p.username, p.title, p.description, p.time_stamp 
+                from prompts p join 
+                    category c on 
+                        c.category_id = p.category_id 
+                WHERE p.prompt_id = ? `,
                     [Id]);
+
         if (!rows || rows.length === 0) {
             return undefined;
         }

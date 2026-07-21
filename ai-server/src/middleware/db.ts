@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 // and connect to the _test database.
 // the _test database is a blank copy of the original database.
 if (process.env.NODE_ENV === 'test') {
-    dotenv.config({ path: '.env._test' });
+    dotenv.config({ path: '.env.test' });
 } else {
     dotenv.config();
 }

@@ -12,6 +12,7 @@ import {AuthController} from "./controller/AuthController";
 import {PromptController} from "./controller/PromptController";
 import {CategoryController} from "./controller/CategoryController";
 import {ChatroomController} from "./controller/ChatroomController";
+import {WsController} from "./controller/WsController";
 
 // Servers initialization
 const app = express();
@@ -31,10 +32,11 @@ AuthController.init(app);
 PromptController.init(app);
 CategoryController.init(app);
 ChatroomController.init(app);
+WsController.init(wss);
 
 /* // server listen off couse of jest
 server.listen(3000, () => {
     console.log("Server is running on port 3000");
 });*/
 
-export { app };
+export { app, server};

@@ -58,8 +58,8 @@ export class AuthController {
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             });
 
-            res.json({
-                message: 'Login erfolgreich',
+            res.status(200).json({
+                message: 'Login successful',
                 username: data.data.username
             });
         }catch (error){
@@ -74,7 +74,7 @@ export class AuthController {
 
             if (!data.success) {
                 res.status(400).json({
-                    message: 'Wrong input data',
+                    message: 'Missing or invalid fields',
                     errors: z.treeifyError(data.error)
                 });
                 return;
@@ -117,7 +117,7 @@ export class AuthController {
                     maxAge: 15 * 60 * 1000 // 15 Minuten
                 });
 
-                res.json({message: 'Token refreshed successfully'});
+                res.status(200).json({message: 'Token refreshed successfully'});
         } catch (error: any){
             if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
                 res.status(401).json({ message: "Invalid or expired token" });
@@ -133,7 +133,7 @@ export class AuthController {
             res.clearCookie('accessToken', { httpOnly: true, secure: false, sameSite: 'strict' });
             res.clearCookie('refreshToken', { path: '/refresh', httpOnly: true, secure: true, sameSite: 'strict' }); // Clear the refresh token cookie
 
-            res.json({message: 'Logged out successfully'});
+            res.status(200).json({message: 'Logged out successfully'});
         }catch (error){
             console.error("Logout Error:", error);
             res.status(500).json({ message: 'Internal server error' });

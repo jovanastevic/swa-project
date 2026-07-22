@@ -21,7 +21,6 @@ const wss = new WebSocketServer({server});
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static("public")); //nur für den test WS
 app.use(cors({
     origin: 'http://localhost:4321',
     credentials: true

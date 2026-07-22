@@ -18,7 +18,7 @@
 ### Backend Aufgaben:
 - ~~Auth vlt umändern idk, /logout muss glaub auch da sein~~ [X] - Sadi
 - ~~Swagger UI für API Dokumentation für extra Punkte~~ [X] - Sadi
-- ~~Catagories nur eine Get Route~~ [] - Sadi
+- ~~Catagories nur eine Get Route~~ [X] - Sadi
 - ~~Automatisierte Tests mit Jest~~ [X] - Sadi
 
 ### Fehlermeldungen:

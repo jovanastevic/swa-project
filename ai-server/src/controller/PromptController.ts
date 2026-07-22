@@ -33,7 +33,7 @@ export class PromptController {
 
             const prompt = await PromptService.getPromptById(id);
             if (!prompt) {
-                res.status(404).json({message: `Prompt with ID ${req.params.id} not found`});
+                res.status(404).json({message: `Prompt with ID ${id} not found`});
                 return;
             }
 

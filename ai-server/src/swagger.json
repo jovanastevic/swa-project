@@ -1,0 +1,525 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Actual Intelligence API-DOC",
+    "version": "1.0.0",
+    "description": "API-Dokumentation für das Chatroom Backend.\n\n## 🔌 WebSocket Verbindung\n\nDie Echtzeit-Kommunikation läuft über WebSockets unter `ws://localhost:3000`.\n\n### Unterstützte Events (Client an Server)\nDer Server erwartet JSON-Payloads im folgenden Format:\n\n```json\n{\n  \"event\": \"join\" | \"startTyping\" | \"stopTyping\" | \"message\",\n  \"chat_id\": 123,\n  \"username\": \"Max\",\n  \"message\": \"Hallo!\" // (Nur bei event: message)\n}\n```\n\n### Antworten (Server an Client)\nDer Server sendet Nachrichten im Format:\n```json\n{\n  \"event\": \"message\"| \"stopTyping\" | \"startTyping\" | \"error\",\n  \"data\": { ... }\n}\n```"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Lokaler Entwicklungsserver"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentifizierung und Token-Management"
+    },
+    {
+      "name": "Prompts",
+      "description": "Erstellung und Abfrage von Prompts"
+    },
+    {
+      "name": "Categories",
+      "description": "Verwaltung der Kategorien"
+    },
+    {
+      "name": "Chatrooms",
+      "description": "Chat-Räume beitreten und Nachrichten lesen"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Benutzer anmelden",
+        "description": "Prüft Credentials und setzt accessToken & refreshToken als HttpOnly Cookies.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful"
+          },
+          "400": {
+            "description": "Missing or invalid fields"
+          },
+          "401": {
+            "description": "Wrong password"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Neuen Benutzer registrieren",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Missing or invalid fields"
+          },
+          "409": {
+            "description": "Username already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Access Token erneuern",
+        "security": [
+          {
+            "refreshToken": []
+          }
+        ],
+        "description": "Liest den refreshToken Cookie und stellt einen neuen accessToken Cookie aus.",
+        "responses": {
+          "200": {
+            "description": "Token refreshed successfully"
+          },
+          "401": {
+            "description": "Refresh token required | Invalid or expired token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Benutzer abmelden",
+        "description": "Löscht die accessToken und refreshToken Cookies.",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/category": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Alle Kategorien abrufen",
+        "responses": {
+          "200": {
+            "description": "Liste aller Kategorien",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/prompt": {
+      "get": {
+        "tags": ["Prompts"],
+        "summary": "Alle Prompts abrufen",
+        "responses": {
+          "200": {
+            "description": "Liste aller Prompts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Prompt"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Prompts"],
+        "summary": "Einen neuen Prompt erstellen",
+        "security": [
+          {
+            "accessToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPrompt"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Prompt erfolgreich erstellt"
+          },
+          "400": {
+            "description": "Missing or invalid fields | Failed to create prompt or Category does not exist"
+          },
+          "401": {
+            "description": "Authentication required | Invalid or expired token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/prompt/{id}": {
+      "get": {
+        "tags": ["Prompts"],
+        "summary": "Prompt über ID abrufen",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Der gewünschte Prompt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Prompt"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid prompt id"
+          },
+          "404": {
+            "description": "Prompt with ID ${id} not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/chat-overview": {
+      "get": {
+        "tags": ["Chatrooms"],
+        "summary": "Übersicht der Chaträume des Benutzers",
+        "security": [
+          {
+            "accessToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste der Chaträume",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChatroomOverview"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required | Invalid or expired token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/chat/{id}": {
+      "get": {
+        "tags": ["Chatrooms"],
+        "summary": "Nachrichten eines Chatraums abrufen",
+        "security": [
+          {
+            "accsesToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste von Chat-Nachrichten",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserChatMessage"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid chat id"
+          },
+          "401": {
+            "description": "Authentication required | Invalid or expired token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/chat/join/{prompt_id}": {
+      "post": {
+        "tags": ["Chatrooms"],
+        "summary": "Einem Chatraum beitreten oder erstellen",
+        "security": [
+          {
+            "accessToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "prompt_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Chatraum betreten (gibt die Chat ID zurück)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatroomId"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid prompt id"
+          },
+          "401": {
+            "description": "Authentication required | Invalid or expired token"
+          },
+          "404": {
+            "description": "Prompt was not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "accessToken": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "accessToken",
+        "description": "Wird für die meisten Routen benötigt. Wird beim Login gesetzt."
+      },
+      "refreshToken": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "refreshToken",
+        "description": "Wird nur für die /refresh Route benötigt."
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "required": ["username", "password", "email"],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "profile_description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Prompt": {
+        "type": "object",
+        "properties": {
+          "prompt_id": {
+            "type": "integer"
+          },
+          "category_id": {
+            "type": "integer"
+          },
+          "username": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "time_stamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NewPrompt": {
+        "type": "object",
+        "required": ["category_id", "title", "description"],
+        "properties": {
+          "category_id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ChatroomOverview": {
+        "type": "object",
+        "properties": {
+          "chat_id": {
+            "type": "integer"
+          },
+          "chatroom_time_stamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "prompt_id": {
+            "type": "integer"
+          },
+          "prompt_title": {
+            "type": "string"
+          },
+          "prompt_description": {
+            "type": "string"
+          },
+          "category_title": {
+            "type": "string"
+          }
+        }
+      },
+      "ChatroomId": {
+        "type": "object",
+        "properties": {
+          "chat_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "UserChatMessage": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "time_stamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

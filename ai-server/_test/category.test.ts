@@ -4,7 +4,7 @@ import { app } from '../src';
 import { DB } from '../src/middleware/db';
 import { clearDatabase, seedCategory } from './test-utils';
 
-describe('GET /create-prompt', () => {
+describe('GET /category', () => {
     beforeEach(async () => {
         await clearDatabase();
     });
@@ -14,7 +14,7 @@ describe('GET /create-prompt', () => {
     });
 
     it('returns empty array when no categories exist', async () => {
-        const res = await request(app).get('/create-prompt');
+        const res = await request(app).get('/category');
         expect(res.status).toBe(200);
         expect(res.body).toEqual([]);
     });
@@ -22,7 +22,7 @@ describe('GET /create-prompt', () => {
     it('returns all categories', async () => {
         await seedCategory(1, 'Coding', 'Coding related prompts');
         await seedCategory(2, 'Writing', 'Writing related prompts');
-        const res = await request(app).get('/create-prompt');
+        const res = await request(app).get('/category');
         expect(res.status).toBe(200);
         expect(res.body).toHaveLength(2);
         expect(res.body[0]).toMatchObject({ category_id: 1, title: 'Coding', description: 'Coding related prompts' });

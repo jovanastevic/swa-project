@@ -4,7 +4,7 @@ import {Express, Request, Response} from "express";
 
 export class CategoryController {
     static init(app: Express): void {
-        app.get('/create-prompt', CategoryController.getAllCategories);
+        app.get('/category', CategoryController.getAllCategories);
     }
 
     static async getAllCategories(req: Request, res: Response) {

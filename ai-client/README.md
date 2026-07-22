@@ -1,14 +1,10 @@
-# Astro Starter Kit: Basics
+# AI - Frontend
+Made with Astro and [Shadcn](https://ui.shadcn.com/) with [React](https://docs.astro.build/en/guides/integrations-guide/react/) 
+Components. Shadcn is a UI Library similiar to Bootstrap. It's built on top of TailwindCSS.
 
-```sh
-npm create astro@latest -- --template basics
-```
+## Project Structure
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+Astro Project Structure, more details can be found in the [Astro Docs](https://docs.astro.build/en/basics/project-structure/).
 
 ```text
 /
@@ -16,19 +12,21 @@ Inside of your Astro project, you'll see the following folders and files:
 │   └── favicon.svg
 ├── src
 │   ├── assets
-│   │   └── astro.svg
+│   │   └── logo-light.svg - etc..
 │   ├── components
-│   │   └── Welcome.astro
+│   │   └── ui - Folder with all the UI components from Shadcn
+│   │   └── CreatePromptCard.tsx - etc..
 │   ├── layouts
-│   │   └── Layout.astro
+│   │   └── Layout.astro - etc..
 │   └── pages
-│       └── index.astro
+│       └── index.astro - etc..
+│   └── styles
+│       └── global.css - Changes to the global styles of the project
+
 └── package.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
+## Commands
 
 All commands are run from the root of the project, from a terminal:
 
@@ -41,6 +39,3 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

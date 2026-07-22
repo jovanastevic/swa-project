@@ -1,3 +1,9 @@
+### API Doc
+This is how you acc read the api documentation in a clean Format.
+1. First run this command in your Terminal`npm i`.
+2. Then this command `npm run start.`
+3. After that go to http://localhost:3000/api-docs.
+
 ### Auth frontend implamation example:
 
 Information pulled from here: https://www.wisp.blog/blog/ultimate-guide-to-securing-jwt-authentication-with-httponly-cookies

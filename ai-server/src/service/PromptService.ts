@@ -25,14 +25,14 @@ export class PromptService {
         return parsed.data;
     }
 
-    static async getPromptById(Id: number): Promise< undefined | IPrompt> {
+    static async getPromptById(prompt_id: number): Promise< undefined | IPrompt> {
         const [rows] = await DB.query<RowDataPacket[]>(
             `select p.prompt_id, p.category_id, c.title, p.username, p.title, p.description, p.time_stamp 
                 from prompts p join 
                     category c on 
                         c.category_id = p.category_id 
                 WHERE p.prompt_id = ? `,
-                    [Id]);
+                    [prompt_id]);
 
         if (!rows || rows.length === 0) {
             return undefined;
@@ -41,7 +41,7 @@ export class PromptService {
 
         if (!parsed.success) {
             console.error("Zod Validierungsfehler bei getPromptById:", JSON.stringify(parsed.error.issues, null, 2));
-            throw new Error(`Prompt mit ID ${Id} konnte nicht validiert werden.`);
+            throw new Error(`Prompt mit ID ${prompt_id} konnte nicht validiert werden.`);
         }
         return parsed.data;
     }

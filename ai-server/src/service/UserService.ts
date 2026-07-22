@@ -2,7 +2,6 @@ import {IUser, IUserData, IUserLogin, UserData} from "../interface/User";
 import {compare, hash} from "bcrypt";
 import {DB} from "../middleware/db";
 import {ResultSetHeader, RowDataPacket} from "mysql2";
-import z from "zod";
 
 export class UserService {
 
@@ -45,16 +44,16 @@ export class UserService {
     }
 
     // Check if the password is correct for the given username
-    static async validatePassword(LoginData: IUserLogin): Promise<boolean> {
+    static async validatePassword(loginData: IUserLogin): Promise<boolean> {
         const [rows] = await DB.query<RowDataPacket[]>(
             'select password from user where username = ?',
-                    [LoginData.username]);
+                    [loginData.username]);
 
         if (!rows || rows.length === 0) {
             return false;
         }
 
         const dataBankPassword = rows[0].password;
-        return await compare(LoginData.password, dataBankPassword);
+        return await compare(loginData.password, dataBankPassword);
     }
 }

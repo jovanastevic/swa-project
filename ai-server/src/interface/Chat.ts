@@ -13,7 +13,7 @@ export const ChatroomId = z.object({
     chat_id: z.number()
 })
 
-export const ChatMessage = z.object({
+export const UserChatMessage = z.object({
     username: z.string(),
     message: z.string().nullable(),
     time_stamp: z.date().or(z.string())
@@ -21,4 +21,4 @@ export const ChatMessage = z.object({
 
 export type IChatroomOverview = z.infer<typeof ChatroomOverview>;
 export type IChatroomId = z.infer<typeof ChatroomId>;
-export type IChatMessage = z.infer<typeof ChatMessage>;
+export type IUserChatMessage = z.infer<typeof UserChatMessage>;

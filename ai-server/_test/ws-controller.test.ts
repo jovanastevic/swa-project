@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, beforeEach, afterAll } from '@jest/globals';
 import request from 'supertest';
 import WebSocket from 'ws';
-import { app, server } from '../src/index';
+import { app, server } from '../src';
 import { DB } from '../src/middleware/db';
 import { clearDatabase, seedCategory, registerAndLogin } from './test-utils';
 
@@ -10,8 +10,8 @@ let wsUrl: string;
 async function setupChatroom(): Promise<number> {
     const creatorAgent = request.agent(app);
     await registerAndLogin(creatorAgent, 'creator', 'secret123', 'creator@test.com');
-    await creatorAgent.post('/prompts').send({ category_id: 1, title: 'Prompt', description: 'Desc' });
-    const prompts = await request(app).get('/prompts');
+    await creatorAgent.post('/prompt').send({ category_id: 1, title: 'Prompt', description: 'Desc' });
+    const prompts = await request(app).get('/prompt');
     const promptId = prompts.body[0].prompt_id as number;
 
     const memberAgent = request.agent(app);
@@ -60,7 +60,7 @@ describe('WsController', () => {
     it('rejects join for a non-member', async () => {
         const chatId = await setupChatroom();
         const ws = await connect();
-        ws.send(JSON.stringify({ event: 'join', chat_id: chatId, username: 'outsider' }));
+        ws.send(JSON.stringify({ event: 'join', chat_id: chatId, username: 'outsider'}));
         const res = await nextMessage(ws);
         expect(res).toMatchObject({ event: 'error', data: { message: 'You are not allowed' } });
         ws.close();

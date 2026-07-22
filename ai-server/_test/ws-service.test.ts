@@ -8,7 +8,7 @@ async function seedChatroom(promptId: number, categoryId = 1, creator = 'creator
         'INSERT INTO prompts (prompt_id, category_id, username, title, description) VALUES (?, ?, ?, ?, ?)',
         [promptId, categoryId, creator, 'Prompt', 'Desc']
     );
-    const [insert]: any = await DB.execute('INSERT INTO chat_room (prompt_id) VALUES (?)', [promptId]);
+    const [insert]: any = await DB.execute('INSERT INTO chatroom (prompt_id) VALUES (?)', [promptId]);
     return insert.insertId as number;
 }
 

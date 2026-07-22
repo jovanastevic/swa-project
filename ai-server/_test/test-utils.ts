@@ -6,7 +6,7 @@ export async function clearDatabase(): Promise<void> {
     await DB.query('SET FOREIGN_KEY_CHECKS = 0');
     await DB.query('TRUNCATE TABLE chat_messages');
     await DB.query('TRUNCATE TABLE chat_member');
-    await DB.query('TRUNCATE TABLE chat_room');
+    await DB.query('TRUNCATE TABLE chatroom');
     await DB.query('TRUNCATE TABLE prompts');
     await DB.query('TRUNCATE TABLE category');
     await DB.query('TRUNCATE TABLE user');

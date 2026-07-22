@@ -15,21 +15,21 @@ describe('Chatroom', () => {
     });
 
     async function createPrompt(agent: ReturnType<typeof request.agent>): Promise<number> {
-        await agent.post('/prompts').send({ category_id: 1, title: 'Sample Prompt', description: 'Sample Description' });
-        const res = await request(app).get('/prompts');
+        await agent.post('/prompt').send({ category_id: 1, title: 'Sample Prompt', description: 'Sample Description' });
+        const res = await request(app).get('/prompt');
         return res.body[0].prompt_id as number;
     }
 
-    describe('GET /chatoverview', () => {
+    describe('GET /chat-overview', () => {
         it('rejects unauthenticated requests', async () => {
-            const res = await request(app).get('/chatoverview');
+            const res = await request(app).get('/chat-overview');
             expect(res.status).toBe(401);
         });
 
         it('returns empty overview for a user without chatrooms', async () => {
             const agent = request.agent(app);
             await registerAndLogin(agent, 'gina', 'secret123', 'gina@test.com');
-            const res = await agent.get('/chatoverview');
+            const res = await agent.get('/chat-overview');
             expect(res.status).toBe(200);
             expect(res.body).toEqual([]);
         });
@@ -66,7 +66,7 @@ describe('Chatroom', () => {
             expect(res.status).toBe(201);
             expect(res.body).toHaveProperty('chat_id');
 
-            const overview = await joinerAgent.get('/chatoverview');
+            const overview = await joinerAgent.get('/chat-overview');
             expect(overview.body).toHaveLength(1);
             expect(overview.body[0]).toMatchObject({ prompt_id: promptId });
         });

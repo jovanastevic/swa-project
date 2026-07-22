@@ -3,8 +3,8 @@ import {
     IChatroomOverview,
     ChatroomId,
     IChatroomId,
-    ChatMessage,
-    IChatMessage
+    UserChatMessage,
+    IUserChatMessage
 } from "../interface/Chat";
 import {z} from "zod";
 import {DB} from "../middleware/db";
@@ -17,7 +17,7 @@ export class ChatroomService{
 
         const [chatrooms] = await DB.query<RowDataPacket[]>(
             `SELECT r.chat_id, r.time_stamp as chatroom_time_stamp, p.prompt_id ,p.title as prompt_title, p.description as prompt_description, c.title as category_title
-                FROM chat_room r JOIN 
+                FROM chatroom r JOIN 
                     chat_member m ON 
                         r.chat_id = m.chat_id JOIN 
                     prompts p ON 
@@ -39,7 +39,7 @@ export class ChatroomService{
         }
         return parsed.data;
     }
-    static async JoinOrCreateChatroom(username: string, prompt_id: number): Promise<IChatroomId> {
+    static async joinOrCreateChatroom(username: string, prompt_id: number): Promise<IChatroomId> {
         // Validate prompt_id
         const prompt = await PromptService.getPromptById(prompt_id);
         if (!prompt) {
@@ -84,7 +84,7 @@ export class ChatroomService{
 
         const [rows] = await DB.query<RowDataPacket[]>(
             `SELECT chat_id
-                    from chat_room 
+                    from chatroom 
                     WHERE prompt_id = ?`,
                                 [prompt_id]);
 
@@ -97,7 +97,7 @@ export class ChatroomService{
 
     static async createChatroom(prompt_id: number): Promise<number> {
         const [insert] = await DB.execute<ResultSetHeader>(
-            'INSERT INTO chat_room (prompt_id) VALUES (?)',
+            'INSERT INTO chatroom (prompt_id) VALUES (?)',
                     [prompt_id]);
             return insert.insertId;
     }
@@ -111,19 +111,19 @@ export class ChatroomService{
         return true;
     }
 
-    static async getMessagesByChatId(chat_id: number): Promise<IChatMessage[]> {
+    static async getMessagesByChatId(chat_id: number): Promise<IUserChatMessage[]> {
         const [rows] = await DB.query<RowDataPacket[]>(
-            `select username, message, time_stamp 
-                    from chat_messages 
-                    where chat_id = ? 
-                order by time_stamp asc`,
+            `select username, message, time_stamp
+             from chat_messages
+             where chat_id = ?
+             order by time_stamp `,
                     [chat_id]);
 
         if (!rows || rows.length === 0) {
             return [];
         }
 
-        const parsed = z.array(ChatMessage).safeParse(rows);
+        const parsed = z.array(UserChatMessage).safeParse(rows);
 
         if (!parsed.success) {
             console.error("Zod Validierungsfehler bei getMessagesByChatId:", JSON.stringify(parsed.error.issues, null, 2));

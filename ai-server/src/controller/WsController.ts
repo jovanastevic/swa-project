@@ -1,7 +1,7 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { WsService } from '../service/WsService';
 import { IWSChatMessage, WSEventSchema } from "../interface/Ws";
-import z from "zod";
+import {z} from "zod";
 
 export class WsController {
     // Sicher im Controller gekapselt
@@ -12,7 +12,6 @@ export class WsController {
             if (client.readyState === WebSocket.OPEN && this.chatRooms.get(client) === data.chat_id) {
                 client.send(JSON.stringify({
                     event: 'message',
-                    // Konsistent auf 'username' geändert, damit das Frontend nicht verwirrt wird
                     data: { username: data.username, message: data.message, time_stamp: data.time_stamp }
                 }));
             }
@@ -22,7 +21,6 @@ export class WsController {
     private static broadcastTypingToChat(wss: WebSocketServer, chat_id: number, username: string, typing: 'startTyping' | 'stopTyping') {
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN && this.chatRooms.get(client) === chat_id) {
-                // Konsistent auf 'username' geändert
                 client.send(JSON.stringify({ event: typing, data: { username: username } }));
             }
         });
@@ -34,16 +32,17 @@ export class WsController {
 
             ws.on('message', async (message) => {
                 try {
-                    // 1. JSON sicher parsen (.toString() ist wichtig, da 'message' oft ein Buffer ist)
                     const rawData = JSON.parse(message.toString());
 
-                    // 2. Mit Zod exakt validieren, ob das Event korrekt strukturiert ist
                     const parsed = WSEventSchema.safeParse(rawData);
 
                     if (!parsed.success) {
                         ws.send(JSON.stringify({
                             event: 'error',
-                            data: { message: "Invalid payload format", errors: z.treeifyError(parsed.error) }
+                            data: {
+                                message: "Invalid payload format",
+                                errors: z.treeifyError(parsed.error)
+                            }
                         }));
                         return;
                     }
@@ -54,7 +53,12 @@ export class WsController {
                         case 'join': {
                             const isAllowed = await WsService.isUserInRoom(data.username, data.chat_id);
                             if (!isAllowed) {
-                                ws.send(JSON.stringify({ event: 'error', data: { message: "You are not allowed" } }));
+                                ws.send(JSON.stringify({
+                                    event: 'error',
+                                    data: {
+                                        message: "You are not allowed"
+                                    }
+                                }));
                                 return;
                             }
                             this.chatRooms.set(ws, data.chat_id);
@@ -85,14 +89,18 @@ export class WsController {
                                         time_stamp: new Date()
                                     });
                                 } else {
-                                    ws.send(JSON.stringify({ event: 'error', data: { message: "Failed to save message" } }));
+                                    ws.send(JSON.stringify({
+                                        event: 'error',
+                                        data: {
+                                            message: "Failed to save message"
+                                        }
+                                    }));
                                 }
                             }
                             break;
                         }
                     }
                 } catch (error) {
-                    // Fängt ab, falls der Client "Hallo Welt" statt {"event": "join"} schickt
                     console.error("WebSocket payload error:", error);
                     ws.send(JSON.stringify({ event: 'error', data: { message: "Malformed JSON" } }));
                 }

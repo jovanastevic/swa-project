@@ -8,8 +8,8 @@ export class AuthController {
     static init(app: Express): void {
         app.post('/login', AuthController.login);
         app.post('/register', AuthController.register);
-        app.post('/logout', AuthController.logout);
         app.post('/refresh', AuthController.refresh);
+        app.post('/logout', AuthController.logout);
     }
 
     static async login(req: Request, res: Response): Promise<void> {

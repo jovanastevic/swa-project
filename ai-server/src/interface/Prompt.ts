@@ -15,10 +15,5 @@ export const NewPrompt = z.object({
     description: z.string(),
 })
 
-export const PromptId = z.object({
-    prompt_id: z.number()
-})
-
-
 export type IPrompt = z.infer<typeof Prompt>;
 export type INewPrompt = z.infer<typeof NewPrompt>;

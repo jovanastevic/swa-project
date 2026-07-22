@@ -4,9 +4,9 @@ import {ChatroomService} from "../service/ChatroomService";
 
 export class ChatroomController {
     static init(app: Express): void {
-        app.get('/chatoverview', validateAuth, ChatroomController.getUserChatrooms);
+        app.get('/chat-overview', validateAuth, ChatroomController.getUserChatrooms);
         app.get('/chat/:id', validateAuth, ChatroomController.getMessagesByChatId);
-        app.post('/chat/join/:prompt_id', validateAuth, ChatroomController.JoinOrCreateChatroom)
+        app.post('/chat/join/:prompt_id', validateAuth, ChatroomController.joinOrCreateChatroom)
 
     }
 
@@ -41,7 +41,7 @@ export class ChatroomController {
         }
     }
 
-    static async JoinOrCreateChatroom(req: Request, res: Response){
+    static async joinOrCreateChatroom(req: Request, res: Response){
         try{
             const username = req.params._username as string;
             const prompt_id = parseInt(req.params.prompt_id as string);
@@ -51,7 +51,7 @@ export class ChatroomController {
                 return;
             }
 
-            const room = await ChatroomService.JoinOrCreateChatroom(username, prompt_id);
+            const room = await ChatroomService.joinOrCreateChatroom(username, prompt_id);
 
             res.status(201).json(room);
         }catch (error: any) {

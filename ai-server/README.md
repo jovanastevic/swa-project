@@ -1,13 +1,14 @@
-### API Doc
-This is how you acc read the api documentation in a clean Format.
-1. First run this command in your Terminal`npm i`.
-2. Then this command `npm run start.`
-3. After that go to http://localhost:3000/api-docs.
+# API Doc
+This is how you acc read the api documentation in a clean format.
+1. Run this command in your Terminal `npm i`.
+2. Then run this command `npm run start.`
+3. After that go to http://localhost:3000/api-docs
 
-### Auth frontend implamation example:
+## Auth frontend implementation example:
 
 Information pulled from here: https://www.wisp.blog/blog/ultimate-guide-to-securing-jwt-authentication-with-httponly-cookies
 
+### Example two:
     // React example using fetch
     const login = async (username, password) => {
     try {
@@ -33,7 +34,7 @@ Information pulled from here: https://www.wisp.blog/blog/ultimate-guide-to-secur
     }
     };
 
-## Example two:
+### Example two:
     // Utility function for API requests
     const apiRequest = async (url, options = {}) => {
     try {

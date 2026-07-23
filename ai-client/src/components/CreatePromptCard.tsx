@@ -19,7 +19,7 @@ import {Label} from "@/components/ui/label"
 import {Textarea} from "@/components/ui/textarea"
 import {useState} from "react";
 
-import {api} from "@/lib/api";
+import {_api} from "@/lib/_api.ts";
 
 type Category = {
     label: string
@@ -49,7 +49,7 @@ export function TestCard() {
         e.preventDefault();
 
         try {
-            await api.createPrompt({
+            await _api.createPrompt({
                 category_id: 1, //hardcoded gelassen, weil combobox nervt
                 title: formData.title,
                 description: formData.description,

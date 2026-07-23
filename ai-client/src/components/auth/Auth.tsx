@@ -12,7 +12,7 @@ import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 
 import {useState} from "react"
-import {api} from "@/lib/api"
+import {_api} from "@/lib/_api.ts"
 
 export function Auth() {
     const [isLogin, setIsLogin] = useState(true);
@@ -34,13 +34,13 @@ export function Auth() {
 
         try {
             if (isLogin) {
-                await api.login({
+                await _api.login({
                     username: formData.username,
                     password: formData.password
                 });
                 window.location.href = "/";
             } else {
-                 await api.register({
+                 await _api.register({
                     username: formData.username,
                     password: formData.password,
                     email: formData.email,

@@ -285,7 +285,7 @@
         "summary": "Nachrichten eines Chatraums abrufen",
         "security": [
           {
-            "accsesToken": []
+            "accessToken": []
           }
         ],
         "parameters": [

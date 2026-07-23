@@ -7,7 +7,7 @@ import {INewPrompt, IPrompt, Prompt} from "../interface/Prompt";
 export class PromptService {
     static async getAllPrompts(): Promise<IPrompt[]> {
         const [prompts] = await DB.query<RowDataPacket[]>(
-            `select p.prompt_id, p.category_id, c.title, p.username, p.title, p.description, p.time_stamp 
+            `select p.prompt_id, c.title as category_title, p.username, p.title, p.description, p.time_stamp 
                     from prompts p join 
                         category c on 
                             c.category_id = p.category_id`);
@@ -27,7 +27,7 @@ export class PromptService {
 
     static async getPromptById(prompt_id: number): Promise< undefined | IPrompt> {
         const [rows] = await DB.query<RowDataPacket[]>(
-            `select p.prompt_id, p.category_id, c.title, p.username, p.title, p.description, p.time_stamp 
+            `select p.prompt_id, c.title as category_title, p.username, p.title, p.description, p.time_stamp 
                 from prompts p join 
                     category c on 
                         c.category_id = p.category_id 

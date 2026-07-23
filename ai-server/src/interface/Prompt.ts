@@ -2,7 +2,7 @@ import {z} from 'zod';
 
 export const Prompt = z.object({
     prompt_id: z.number(),
-    category_id: z.number(),
+    category_title: z.string(),
     username: z.string(),
     title: z.string(),
     description: z.string(),

@@ -1,7 +1,7 @@
 # API Doc
-This is how you acc read the api documentation in a clean format.
-1. Run this command in your Terminal `npm i`.
-2. Then run this command `npm run start.`
+This is how you read the API documentation in a clean format made with Swagger UI.
+1. Run this command in your Terminal `npm i`
+2. Then run this command `npm run start`
 3. After that go to http://localhost:3000/api-docs
 
 ## Auth frontend implementation example:

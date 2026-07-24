@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
 // const prompts = await res.json();
 import {promptsApi} from '../lib/api.ts';
 
-const prompts = await promptsApi.promptGet();
+const prompts = await promptsApi.getAllPrompts();
 ---
 <!-- all prompts are displayed on the homepage, getPrompts is returning an array of prompts -->
 <Layout>

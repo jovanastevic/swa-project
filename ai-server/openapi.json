@@ -32,6 +32,7 @@
   "paths": {
     "/login": {
       "post": {
+        "operationId": "login",
         "tags": ["Auth"],
         "summary": "Benutzer anmelden",
         "description": "Prüft Credentials und setzt accessToken & refreshToken als HttpOnly Cookies.",
@@ -63,6 +64,7 @@
     },
     "/register": {
       "post": {
+        "operationId": "register",
         "tags": ["Auth"],
         "summary": "Neuen Benutzer registrieren",
         "requestBody": {
@@ -93,6 +95,7 @@
     },
     "/refresh": {
       "post": {
+        "operationId": "refresh",
         "tags": ["Auth"],
         "summary": "Access Token erneuern",
         "security": [
@@ -116,6 +119,7 @@
     },
     "/logout": {
       "post": {
+        "operationId": "logout",
         "tags": ["Auth"],
         "summary": "Benutzer abmelden",
         "description": "Löscht die accessToken und refreshToken Cookies.",
@@ -131,6 +135,7 @@
     },
     "/category": {
       "get": {
+        "operationId": "getAllCategories",
         "tags": ["Categories"],
         "summary": "Alle Kategorien abrufen",
         "responses": {
@@ -155,6 +160,7 @@
     },
     "/prompt": {
       "get": {
+        "operationId": "getAllPrompts",
         "tags": ["Prompts"],
         "summary": "Alle Prompts abrufen",
         "responses": {
@@ -177,6 +183,7 @@
         }
       },
       "post": {
+        "operationId": "createPrompt",
         "tags": ["Prompts"],
         "summary": "Einen neuen Prompt erstellen",
         "security": [
@@ -212,6 +219,7 @@
     },
     "/prompt/{id}": {
       "get": {
+        "operationId": "getPromptById",
         "tags": ["Prompts"],
         "summary": "Prompt über ID abrufen",
         "parameters": [
@@ -249,6 +257,7 @@
     },
     "/chat-overview": {
       "get": {
+        "operationId": "getUserChatrooms",
         "tags": ["Chatrooms"],
         "summary": "Übersicht der Chaträume des Benutzers",
         "security": [
@@ -281,6 +290,7 @@
     },
     "/chat/{id}": {
       "get": {
+        "operationId": "getMessagesByChatId",
         "tags": ["Chatrooms"],
         "summary": "Nachrichten eines Chatraums abrufen",
         "security": [
@@ -326,6 +336,7 @@
     },
     "/chat/join/{prompt_id}": {
       "post": {
+        "operationId": "joinOrCreateChatroom",
         "tags": ["Chatrooms"],
         "summary": "Einem Chatraum beitreten oder erstellen",
         "security": [

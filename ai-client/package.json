@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate:api": "openapi-generator-cli generate -i ../ai-server/openapi.json -g typescript-fetch -o ./src/api-client --additional-properties=supportsES6=true,typescriptThreePlus=true,withInterfaces=true"
+    "generate:api": "openapi-generator-cli generate -i ../ai-server/openapi.json -g typescript-fetch -o ./src/api-client --additional-properties=supportsES6=true,typescriptThreePlus=true,withInterfaces=true,modelPropertyNaming=original"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

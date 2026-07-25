@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge"
+import type {Prompt} from "@/api-client/models"
 import {
     Card,
     CardContent,
@@ -7,17 +8,21 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
+interface PromptCardProps {
+    prompt: Prompt
+}
+
 // used in homepage "/"
 // Used components and their documentation:
 // https://ui.shadcn.com/docs/components/base/card
-export function PromptCard({prompt}) {
+export function PromptCard({prompt}: PromptCardProps) {
     return (
         <Card className="mx-auto w-full max-w-1/2">
             <CardHeader>
                 <div>
-                    <Badge>{prompt.category_id}</Badge>
+                    <Badge>{prompt.category_title}</Badge>
                 </div>
-                <CardTitle><a href={`/prompt/${prompt.id}`}>{prompt.title}</a></CardTitle>
+                <CardTitle><a href={`/prompt/${prompt.prompt_id}`}>{prompt.title}</a></CardTitle>
                 <CardDescription>
                     <span className="font-bold">@{prompt.username}</span>
                 </CardDescription>

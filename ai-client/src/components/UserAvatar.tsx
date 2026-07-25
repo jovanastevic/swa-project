@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 
 export function UserAvatar() {
+    //TODO: Logout
     function handleLogout() {
         window.location.href = "/auth";
     }

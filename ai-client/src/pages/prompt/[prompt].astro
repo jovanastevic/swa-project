@@ -6,6 +6,7 @@ import {promptsApi} from '@/lib/api';
 const { prompt } = Astro.params;
 const response = await promptsApi.getPromptById(prompt);
 ---
+<!-- detailpage for prompts showing description as well -->
 <Layout>
     <main class="flex flex-col items-center min-h-screen p-4">
         <PromptCardDetail client:load prompt={response} />

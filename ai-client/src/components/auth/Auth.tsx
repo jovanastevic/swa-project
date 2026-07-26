@@ -12,19 +12,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthForm } from "@/hooks/useAuthForm.ts";
 
+// TODO: check ob das passt mit hook
+
 export function Auth() {
     const { isLogin, formData, error, loading, handleChange, toggleMode, handleSubmit } = useAuthForm();
 
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
-                <CardTitle>{isLogin ? "Login" : "Registrieren"}</CardTitle>
+                <CardTitle>{isLogin ? "Login" : "Register"}</CardTitle>
                 <CardDescription>
-                    {isLogin ? "Gib deinen Username ein, um dich einzuloggen." : "Erstelle ein Konto, um loszulegen."}
+                    {isLogin ? "Sign in to your account with your username" : "Create a new account by filling out the form below"}
                 </CardDescription>
                 <CardAction>
                     <Button variant="link" onClick={toggleMode}>
-                        {isLogin ? "Registrieren" : "Login"}
+                        {isLogin ? "Register" : "Login"}
                     </Button>
                 </CardAction>
             </CardHeader>
@@ -39,20 +41,20 @@ export function Auth() {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Passwort</Label>
+                            <Label htmlFor="password">Password</Label>
                             <Input id="password" type="password" required value={formData.password} onChange={handleChange} />
                         </div>
 
                         {!isLogin && (
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-Mail</Label>
+                                <Label htmlFor="email">Email</Label>
                                 <Input id="email" type="email" required value={formData.email} onChange={handleChange} />
                             </div>
                         )}
 
                         {!isLogin && (
                             <div className="grid gap-2">
-                                <Label htmlFor="profile_description">Beschreibung</Label>
+                                <Label htmlFor="profile_description">Profile description</Label>
                                 <Input id="profile_description" type="text" value={formData.profile_description} onChange={handleChange} />
                             </div>
                         )}
@@ -61,7 +63,7 @@ export function Auth() {
             </CardContent>
             <CardFooter className="flex-col gap-2">
                 <Button type="submit" className="w-full" form="auth-form" disabled={loading}>
-                    {loading ? "Wird gesendet..." : isLogin ? "Login" : "Registrieren"}
+                    {loading ? "Sending..." : isLogin ? "Login" : "Register"}
                 </Button>
             </CardFooter>
         </Card>

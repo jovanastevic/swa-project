@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {formatTimestamp} from "@/lib/utils.ts";
-import {JSX} from "react";
 
+// TODO: check if interface needed
 interface PromptCardDetailProps {
     prompt: Prompt
 }
@@ -26,7 +26,7 @@ export function PromptCardDetail({prompt}: PromptCardDetailProps) {
                 </div>
                 <CardTitle><a href={`/prompt/${prompt.prompt_id}`}>{prompt.title}</a></CardTitle>
                 <CardDescription>
-                    {formatTimestamp(prompt.time_stamp)} <br/> <a href="/#gehtnicht" className="font-bold">@{prompt.username}</a>
+                    {formatTimestamp(prompt.time_stamp)} <br/> <p className="font-bold">@{prompt.username}</p>
                 </CardDescription>
             </CardHeader>
             <CardContent>

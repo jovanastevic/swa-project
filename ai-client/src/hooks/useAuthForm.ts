@@ -17,6 +17,8 @@ const initialFormData: FormData = {
     profile_description: "",
 };
 
+// TODO: code checken
+
 async function extractErrorMessage(err: unknown): Promise<string> {
     if (err instanceof ResponseError) {
         try {
@@ -56,6 +58,7 @@ export function useAuthForm() {
             password: formData.password,
         };
         await authApi.loginUser({ userLogin: payload });
+        localStorage.setItem("isLoggedIn", "true");
         window.location.href = "/";
     };
 

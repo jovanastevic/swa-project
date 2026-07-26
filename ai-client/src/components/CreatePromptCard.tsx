@@ -21,6 +21,8 @@ import { useState } from "react"
 import { promptsApi } from "@/lib/api.ts"
 import { ResponseError } from "@/api-client";
 
+// TODO: code lesen und checken ob alles needed
+
 export interface CategoryOption {
     label: string
     value: number
@@ -43,7 +45,7 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
         setError("");
 
         if (!category) {
-            setError("Bitte eine Kategorie auswählen.");
+            setError("Select a category.");
             return;
         }
 
@@ -64,9 +66,9 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
         } catch (err) {
             if (err instanceof ResponseError) {
                 const body = await err.response.json().catch(() => null);
-                setError(body?.message ?? "Prompt konnte nicht erstellt werden.");
+                setError(body?.message ?? "Failed to create prompt");
             } else {
-                setError("Prompt konnte nicht erstellt werden.");
+                setError("Failed to create prompt");
             }
             console.error(err);
         } finally {
@@ -77,7 +79,7 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
     return (
         <Card className="w-full max-w-lg">
             <CardHeader>
-                <CardTitle className="text-2xl">Erstelle Prompt</CardTitle>
+                <CardTitle className="text-2xl">Create prompt</CardTitle>
             </CardHeader>
             <CardContent>
                 <form id="create-prompt-form" onSubmit={handleSubmit}>
@@ -85,11 +87,11 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
                         {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
 
                         <div className="grid gap-2">
-                            <Label>Kategorie</Label>
+                            <Label>Category</Label>
                             <Combobox items={categories} value={category} onValueChange={setCategory}>
-                                <ComboboxInput placeholder="Kategorie wählen" />
+                                <ComboboxInput placeholder="Select a category" />
                                 <ComboboxContent>
-                                    <ComboboxEmpty>Keine Einträge gefunden</ComboboxEmpty>
+                                    <ComboboxEmpty>No entries found</ComboboxEmpty>
                                     <ComboboxList>
                                         {(cat) => (
                                             <ComboboxItem key={cat.value} value={cat}>
@@ -102,7 +104,7 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="title">Titel</Label>
+                            <Label htmlFor="title">Title</Label>
                             <Input
                                 id="title"
                                 type="text"
@@ -113,10 +115,10 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="description">Beschreibung</Label>
+                            <Label htmlFor="description">Description</Label>
                             <Textarea
                                 id="description"
-                                placeholder="Gib hier deinen Prompt ein..."
+                                placeholder="Enter your prompt here..."
                                 required
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
@@ -127,7 +129,7 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
             </CardContent>
             <CardFooter className="flex-col gap-2">
                 <Button type="submit" form="create-prompt-form" disabled={loading}>
-                    {loading ? "Wird gepostet..." : "Posten"}
+                    {loading ? "Posting..." : "Post"}
                 </Button>
             </CardFooter>
         </Card>

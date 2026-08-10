@@ -11,19 +11,20 @@
 ### Frontend Aufgaben:
 - Websocket Oberfläche [] - Jovana
 - Authentication Login und Logout [] - Jovana
-- /index sichtbar auch wenn nicht eingeloggt, aber im Header soll "Login" stehen [] - Jovana
+- ~~/index sichtbar auch wenn nicht eingeloggt, aber im Header soll "Login" stehen~~ [X] - Jovana
 - Prompts löschen und neue einbauen weil "test test" is oag schirch [] - maybe Verena
-- Code Kommentare einbauen [] - Sadi & Jovana
+- ~~Code Kommentare einbauen~~ [X] - Sadi & Jovana
 
 ### Backend Aufgaben:
 - ~~Auth vlt umändern idk, /logout muss glaub auch da sein~~ [X] - Sadi
 - ~~Swagger UI für API Dokumentation für extra Punkte~~ [X] - Sadi
 - ~~Catagories nur eine Get Route~~ [X] - Sadi
 - ~~Automatisierte Tests mit Jest~~ [X] - Sadi
+- Backend umschreiben auf 3 Layer und Domain Model, Diagramm entsprechend anpassen []
 
 ### Fehlermeldungen:
 - Wenn keine Prompts, soll kein Error sein, sondern einfach "Keine Prompts vorhanden" oder so anzeigen
-- 404 Error testen
+- 404 Error testen - unnötig
 - beim Eingeben von Login/Register Data sollte auch eine Fehlermeldung kommen, wenn die Daten falsch sind, z.B. "Falscher Benutzername oder Passwort"
 - Beim Erstellen eines Prompts sollte auch eine Fehlermeldung kommen, wenn die Daten falsch sind, z.B. "Ungültige Eingabe"
 - checken ob alle HTTP Codes richtig bzw sinnvoll sind [] - Alle bitte

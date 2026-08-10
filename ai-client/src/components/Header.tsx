@@ -23,12 +23,11 @@ export function Header() {
                     <PlusIcon/>
                 </a>
                 <ModeToggle/>
-                {/*TODO: Button for Login if not logged in*/}
                 { isLoggedIn ? <UserAvatar/> : <a
                     href="/auth"
-                    className={buttonVariants({ variant: "secondary", size: "default" })}
+                    className={buttonVariants()}
                 >
-                    Login
+                    Login/Sign Up
                 </a>}
             </div>
         </header>

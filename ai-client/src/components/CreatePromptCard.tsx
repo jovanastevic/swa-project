@@ -88,7 +88,7 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
 
                         <div className="grid gap-2">
                             <Label>Category</Label>
-                            <Combobox items={categories} value={category} onValueChange={setCategory}>
+                            <Combobox items={categories} value={category} onValueChange={(value) => setCategory(value ?? undefined)}>
                                 <ComboboxInput placeholder="Select a category" />
                                 <ComboboxContent>
                                     <ComboboxEmpty>No entries found</ComboboxEmpty>

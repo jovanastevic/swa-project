@@ -4,7 +4,13 @@ import Layout from '../../layouts/Layout.astro';
 import { PromptCardDetail } from '../../components/PromptCardDetail.tsx';
 import {promptsApi} from '@/lib/api';
 const { prompt } = Astro.params;
-const response = await promptsApi.getPromptById(prompt);
+
+if (!prompt) {
+    return Astro.redirect('/404');
+}
+
+const id = parseInt(prompt);
+const response = await promptsApi.getPromptById({id});
 ---
 <!-- detailpage for prompts showing description as well -->
 <Layout>

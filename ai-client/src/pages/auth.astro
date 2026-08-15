@@ -1,0 +1,8 @@
+---
+import AuthLayout from '../layouts/AuthLayout.astro';
+import { Auth as AuthComponent } from "../components/auth/Auth.tsx"
+---
+<!--auth page for login/register-->
+<AuthLayout>
+    <AuthComponent client:load />
+</AuthLayout>

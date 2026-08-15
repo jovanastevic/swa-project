@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {CreatePromptCard} from "../components/CreatePromptCard.tsx"
+import {categoriesApi} from "@/lib/api.ts";
+import type { CategoryOption } from "../components/CreatePromptCard.tsx";
+
+const data = await categoriesApi.getAllCategories();
+// data has to be mapped for combobox
+const categories: CategoryOption[] = data.map((c) => ({
+    label: c.title,
+    value: c.category_id,
+}));
+---
+<!--page user is receiving after pressing the plus icon in the header -->
+<Layout>
+    <main class="flex flex-col items-center min-h-screen p-4">
+        <CreatePromptCard client:load categories={categories} />
+    </main>
+</Layout>

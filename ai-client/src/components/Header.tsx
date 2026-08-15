@@ -1,10 +1,14 @@
 import {UserAvatar} from "./UserAvatar";
+import { buttonVariants } from "@/components/ui/button"
 import logo from "@/assets/logo-yea.svg";
 import logoLight from "@/assets/logo-yea-light.svg";
 import {ModeToggle} from "@/components/ModeToggle.tsx";
 import {PlusIcon} from "lucide-react"
+import {useAuth} from "@/hooks/useAuth.ts";
 
 export function Header() {
+    const { isLoggedIn } = useAuth();
+
     return (
         <header className="w-full h-18 flex items-center border-b justify-between p-3">
             <div className="flex items-center">
@@ -19,7 +23,12 @@ export function Header() {
                     <PlusIcon/>
                 </a>
                 <ModeToggle/>
-                <UserAvatar/>
+                { isLoggedIn ? <UserAvatar/> : <a
+                    href="/auth"
+                    className={buttonVariants()}
+                >
+                    Login
+                </a>}
             </div>
         </header>
     )

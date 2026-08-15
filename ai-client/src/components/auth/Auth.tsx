@@ -1,4 +1,4 @@
-import {Button} from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardAction,
@@ -7,124 +7,65 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuthForm } from "@/hooks/useAuthForm.ts";
 
-import {useState} from "react"
-import {api} from "@/lib/api"
+// TODO: check ob das passt mit hook
 
 export function Auth() {
-    const [isLogin, setIsLogin] = useState(true);
-    const [error, setError] = useState("");
-    const [formData, setFormData] = useState({
-        username: "",
-        password: "",
-        email: "",
-        profileDescription: "",
-    });
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({...formData, [e.target.id]: e.target.value});
-    };
-
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setError("");
-
-        try {
-            if (isLogin) {
-                await api.login({
-                    username: formData.username,
-                    password: formData.password
-                });
-                window.location.href = "/";
-            } else {
-                 await api.register({
-                    username: formData.username,
-                    password: formData.password,
-                    email: formData.email,
-                    profileDescription: formData.profileDescription,
-                });
-
-                setIsLogin(true);
-            }
-        } catch (err: any) {
-            console.error(err);
-            setError(err.message || "Login fehlgeschlagen");
-        }
-    }
-
+    const { isLogin, formData, error, loading, handleChange, toggleMode, handleSubmit } = useAuthForm();
 
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
-                <CardTitle>{isLogin ? "Login" : "Registrieren"}</CardTitle>
+                <CardTitle>{isLogin ? "Login" : "Register"}</CardTitle>
                 <CardDescription>
-                    {isLogin ? "Gib deinen Username ein, um dich einzuloggen." : "Erstelle ein Konto, um loszulegen."}
+                    {isLogin ? "Sign in to your account with your username" : "Create a new account by filling out the form below"}
                 </CardDescription>
                 <CardAction>
-                    <Button variant="link"
-                            onClick={() => setIsLogin(!isLogin)}>{isLogin ? "Registrieren" : "Login"}</Button>
+                    <Button variant="link" onClick={toggleMode}>
+                        {isLogin ? "Register" : "Login"}
+                    </Button>
                 </CardAction>
             </CardHeader>
             <CardContent>
                 <form id="auth-form" onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-6">
                         {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
+
                         <div className="grid gap-2">
                             <Label htmlFor="username">Username</Label>
-                            <Input
-                                id="username"
-                                type="text"
-                                required
-                                value={formData.username}
-                                onChange={handleChange}
-                            />
+                            <Input id="username" type="text" required value={formData.username} onChange={handleChange} />
                         </div>
+
                         <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label htmlFor="password">Passwort</Label>
-                            </div>
-                            <Input
-                                id="password"
-                                type="password"
-                                required
-                                value={formData.password}
-                                onChange={handleChange}/>
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" type="password" required value={formData.password} onChange={handleChange} />
                         </div>
-                        {!isLogin &&(
+
+                        {!isLogin && (
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-Mail</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    required
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                />
+                                <Label htmlFor="email">Email</Label>
+                                <Input id="email" type="email" required value={formData.email} onChange={handleChange} />
                             </div>
                         )}
+
                         {!isLogin && (
-                        <div className="grid gap-2">
-                            <Label htmlFor="profileDescription">Beschreibung</Label>
-                            <Input
-                                id="profileDescription"
-                                type="text"
-                                required
-                                value={formData.profileDescription}
-                                onChange={handleChange}
-                            />
-                        </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="profile_description">Profile description</Label>
+                                <Input id="profile_description" type="text" value={formData.profile_description} onChange={handleChange} />
+                            </div>
                         )}
                     </div>
                 </form>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Button type="submit" className="w-full" form="auth-form">
-                    {isLogin ? "Login" : "Registrieren"}
+                <Button type="submit" className="w-full" form="auth-form" disabled={loading}>
+                    {loading ? "Sending..." : isLogin ? "Login" : "Register"}
                 </Button>
             </CardFooter>
         </Card>
-    )
+    );
 }

@@ -6,6 +6,8 @@ import cors from "cors"; // <- Allows requests from other origins (frontend)
 import cookieParser from "cookie-parser"; // <- Parses cookies from requests
 import {createServer} from "node:http";  // <- Creates a HTTP server
 import {WebSocketServer} from "ws"; // <- WebSocket server for real-time communication
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from '../openapi.json';
 
 // Import controllers
 import {AuthController} from "./controller/AuthController";
@@ -25,6 +27,9 @@ app.use(cors({
     origin: 'http://localhost:4321',
     credentials: true
 }));
+
+// Setup Swagger UI for API documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Initialize controllers
 AuthController.init(app);

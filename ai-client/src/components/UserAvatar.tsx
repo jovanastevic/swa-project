@@ -14,10 +14,21 @@ import {
     SettingsIcon,
     UserIcon,
 } from "lucide-react"
+import {authApi} from "@/lib/api.ts";
+import {useState} from "react";
 
 export function UserAvatar() {
-    function handleLogout() {
-        window.location.href = "/auth";
+    const [loggingOut, setLoggingOut] = useState<boolean>(false);
+    async function handleLogout() {
+        setLoggingOut(true);
+        try{
+            await authApi.logoutUser();
+        } catch (err){
+            console.error("Logout failed:", err);
+        } finally {
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "/auth";
+        }
     }
 
     return (
@@ -48,7 +59,7 @@ export function UserAvatar() {
                 <DropdownMenuGroup>
                     <DropdownMenuItem variant="destructive" onClick={handleLogout}>
                         <LogOutIcon/>
-                        Abmelden</DropdownMenuItem>
+                        {loggingOut ? "Wird abgemeldet..." : "Abmelden"}</DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

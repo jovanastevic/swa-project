@@ -36,7 +36,7 @@ export function PromptCardDetail({prompt}: PromptCardDetailProps) {
             </CardContent>
             <CardFooter className="flex-col gap-2">
                 <Button type="submit" className="w-full">
-                    Erstellen
+                    Start Chat
                 </Button>
             </CardFooter>
         </Card>

@@ -27,7 +27,7 @@ export function Header() {
                     href="/auth"
                     className={buttonVariants()}
                 >
-                    Login/Sign Up
+                    Login
                 </a>}
             </div>
         </header>

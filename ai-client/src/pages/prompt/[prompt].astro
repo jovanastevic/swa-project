@@ -5,6 +5,7 @@ import { PromptCardDetail } from '../../components/PromptCardDetail.tsx';
 import {promptsApi} from '@/lib/api';
 const { prompt } = Astro.params;
 
+//TODO: geht nicht
 if (!prompt) {
     return Astro.redirect('/404');
 }

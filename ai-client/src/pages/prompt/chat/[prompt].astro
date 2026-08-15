@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro'
+import {ChatComponent} from '../../../components/ChatComponent.tsx'
+const {prompt} = Astro.params;
+---
+<Layout>
+    <main class="">
+        <ChatComponent client:only="react" prompt={prompt}/>
+    </main>
+</Layout>

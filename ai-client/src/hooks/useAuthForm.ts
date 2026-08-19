@@ -59,6 +59,7 @@ export function useAuthForm() {
         };
         await authApi.loginUser({ userLogin: payload });
         localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("username", formData.username);
         window.location.href = "/";
     };
 

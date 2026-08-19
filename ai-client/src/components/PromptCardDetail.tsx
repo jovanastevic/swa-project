@@ -35,8 +35,8 @@ export function PromptCardDetail({prompt}: PromptCardDetailProps) {
                 </p>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Button type="submit" className="w-full">
-                    Start Chat
+                <Button asChild className="w-full">
+                    <a href={`/prompt/chat/${prompt.prompt_id}`}>Start Chat</a>
                 </Button>
             </CardFooter>
         </Card>

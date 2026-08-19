@@ -1,12 +1,24 @@
 ---
 export const prerender = false;
+import Layout from '@/layouts/Layout.astro';
+import {Chat} from '@/components/Chat.tsx'
+import { promptsApi } from '@/lib/api';
 
-import Layout from '../../../layouts/Layout.astro'
-import {ChatComponent} from '../../../components/ChatComponent.tsx'
-const {prompt} = Astro.params;
+const { prompt } = Astro.params;
+
+if (!prompt) {
+    return Astro.redirect('/404');
+}
+
+// if (isNaN(promptId)) {
+//     return Astro.redirect('/404');
+// }
+
+const id = parseInt(prompt);
+const response = await promptsApi.getPromptById({id});
 ---
 <Layout>
-    <main class="">
-        <ChatComponent client:only="react" prompt={prompt}/>
+    <main class="flex flex-col items-center min-h-screen p-4">
+        <Chat client:only="react" promptId={id} promptTitle={response.title} />
     </main>
 </Layout>

@@ -27,6 +27,7 @@ export function UserAvatar() {
             console.error("Logout failed:", err);
         } finally {
             localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("username");
             window.location.href = "/auth";
         }
     }

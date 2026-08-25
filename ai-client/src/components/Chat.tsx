@@ -111,7 +111,7 @@ function ChatWindow({chatId, username, initialMessages, promptTitle}: ChatWindow
                                         <Message align={isOwn ? "end" : "start"}>
                                             <MessageAvatar>
                                                 <Avatar>
-                                                    <AvatarFallback>{m.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+                                                    <AvatarFallback>{m.username.slice(0, 1).toUpperCase()}</AvatarFallback>
                                                 </Avatar>
                                             </MessageAvatar>
                                             <MessageContent>

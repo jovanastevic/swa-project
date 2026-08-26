@@ -9,10 +9,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
-    BadgeMinusIcon,
     LogOutIcon,
-    SettingsIcon,
-    UserIcon,
 } from "lucide-react"
 import {authApi} from "@/lib/api.ts";
 import {useState} from "react";
@@ -43,20 +40,6 @@ export function UserAvatar() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-32">
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <UserIcon/>
-                        Profil
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <BadgeMinusIcon/>
-                        Account löschen</DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <SettingsIcon/>
-                        Einstellungen
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator/>
                 <DropdownMenuGroup>
                     <DropdownMenuItem variant="destructive" onClick={handleLogout}>
                         <LogOutIcon/>

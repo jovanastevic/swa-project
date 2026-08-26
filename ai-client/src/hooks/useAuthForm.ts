@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, createContext, useContext } from "react";
 import { ResponseError } from "@/api-client";
 import { authApi } from "@/lib/api.ts";
 import type { User, UserLogin } from "@/api-client";
@@ -34,7 +34,7 @@ async function extractErrorMessage(err: unknown): Promise<string> {
             // Body war kein JSON
         }
     }
-    return "Etwas ist schiefgelaufen. Bitte versuch's erneut.";
+    return "Etwas ist schiefgelaufen. Bitte versuche es erneut.";
 }
 
 export function useAuthForm() {
@@ -57,7 +57,7 @@ export function useAuthForm() {
             username: formData.username,
             password: formData.password,
         };
-        await authApi.loginUser({ userLogin: payload });
+        const userData = await authApi.loginUser({ userLogin: payload });
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("username", formData.username);
         window.location.href = "/";

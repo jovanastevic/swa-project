@@ -1,0 +1,8 @@
+---
+import { ChatOverview } from '../components/ChatOverview.tsx';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+    <ChatOverview client:only="react"/>
+</Layout>

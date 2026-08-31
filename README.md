@@ -18,7 +18,8 @@ Frontend: Prinzipien von MVVM, aber nicht strkt umgesetzt, Custom Hooks fungiere
 React hat One Way Data Binding, also ist es nicht wirklich MVVM, aber wir haben die Prinzipien von MVVM beachtet.
 
 ## TODOS
+- [ ] Auth fixen & testen, ob der Ablauf mit State Diagram passt (zB Logout, Login, Register Weiterleitungen etc.)
 - [ ] Schmiedls Folien lesen und versteheeen
-- [ ] Dokumentationsdokument finishen mit aktuellsten Diagrammen
+- [X] Dokumentationsdokument finishen mit aktuellsten Diagrammen
 - [ ] Seine Email checken & Stichworte hier im File notieren
 - [ ] Unterschiede zwischen den Models ausm Unterricht

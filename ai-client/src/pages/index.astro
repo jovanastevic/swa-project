@@ -9,11 +9,14 @@ const prompts = await promptsApi.getAllPrompts();
 <!-- page can be viewed even if user is not logged in -->
 <Layout>
     <main class="flex flex-col items-center min-h-screen p-4 space-y-2">
-        {prompts.map((prompt) => (
+        {prompts.length === 0 ? (
+            <p class="text-gray-500 mt-10">No prompts available yet.</p>
+            ) : (
+            prompts.map((prompt) => (
                 <div class="w-full">
                 <PromptCard client:only="react" prompt={prompt}/>
                 </div>
-        ))
+        )))
         }
     </main>
 </Layout>

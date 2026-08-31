@@ -3,7 +3,7 @@ import { buttonVariants } from "@/components/ui/button"
 import logo from "@/assets/logo-yea.svg";
 import logoLight from "@/assets/logo-yea-light.svg";
 import {ModeToggle} from "@/components/ModeToggle.tsx";
-import {PlusIcon} from "lucide-react"
+import {InboxIcon, PlusIcon} from "lucide-react"
 import {useAuth} from "@/hooks/useAuth.ts";
 
 export function Header() {
@@ -21,6 +21,9 @@ export function Header() {
             <div className="flex items-center gap-4">
                 <a href="/create-prompt">
                     <PlusIcon/>
+                </a>
+                <a href="/chats">
+                    <InboxIcon/>
                 </a>
                 <ModeToggle/>
                 { isLoggedIn ? <UserAvatar/> : <a

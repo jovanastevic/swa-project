@@ -17,7 +17,6 @@ const initialFormData: FormData = {
     profile_description: "",
 };
 
-// TODO: code checken
 
 async function extractErrorMessage(err: unknown): Promise<string> {
     if (err instanceof ResponseError) {

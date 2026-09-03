@@ -37,7 +37,7 @@ const config = new Configuration({
                         return fetch(context.url, context.init);
                     } catch {
                         // Refresh fehlgeschlagen (Token wirklich abgelaufen) -> zum Login schicken
-                        window.location.href = "/auth";
+                        window.location.href = "/";
                         throw new Error("Session abgelaufen");
                     }
                 }

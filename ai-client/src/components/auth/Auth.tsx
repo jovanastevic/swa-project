@@ -12,8 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthForm } from "@/hooks/useAuthForm.ts";
 
-// TODO: check ob das passt mit hook
-
 export function Auth() {
     const { isLogin, formData, error, loading, handleChange, toggleMode, handleSubmit } = useAuthForm();
 

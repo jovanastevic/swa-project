@@ -21,7 +21,6 @@ import { useState } from "react"
 import { promptsApi } from "@/lib/api.ts"
 import { ResponseError } from "@/api-client";
 
-// TODO: code lesen und checken ob alles needed
 
 export interface CategoryOption {
     label: string
@@ -62,7 +61,7 @@ export function CreatePromptCard({ categories }: CreatePromptCardProps) {
             setCategory(undefined);
             setTitle("");
             setDescription("");
-            window.location.href = "/";
+            window.location.href = "/home";
         } catch (err) {
             if (err instanceof ResponseError) {
                 const body = await err.response.json().catch(() => null);

@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button"
 import {formatTimestamp} from "@/lib/utils.ts";
 
-// TODO: check if interface needed
 interface PromptCardDetailProps {
     prompt: Prompt
 }

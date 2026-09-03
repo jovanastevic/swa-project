@@ -18,7 +18,9 @@ Geschäftsregeln befinden sich im Backend in den Services.
 Sicherheitskritische Regeln werden im Backend angewendet in der Middleware `/src/middleware/auth.ts`.
 
 #### Wenn das Backend einem TS entspricht, ist es ein vollständiges REST-Modell??
-Nein, weil
+Kein FULL REST, weil unsere Routen keine Navigationsnomen sind, sondern auch Verben die etwas tun (zB /join beim Websocket)
+Fehlendes HATEOAS, unsere Endpoints liefern reine Datenarrays bzw. JSON Objekte zurück, echtes REST würde Links zu den nächsten möglichen Aktionen liefern
+Aktionsgetriebene Architektur, Backend denkt in auszuführenden Skripten und nicht in Ressourcen, daher ist es eher ein Transaction Script als ein Domain Model
 
 #### Sind HTTP, Geschäftslogik und Persistenz getrennt? (3-Schichten)
 Nein, es sind nur 2 Schichten, da wir keine separate Persistenzschicht haben. Bei uns sind die Geschäftsregeln in den Services und die Persistenz ist direkt in den Services implementiert.
@@ -28,13 +30,11 @@ Backend Design Pattern: Controller-Service Pattern, kein MVVM, API ist zustandsl
 Frontend: Prinzipien von MVVM, aber nicht strkt umgesetzt, Custom Hooks fungieren als ViewModel. 
 React hat One Way Data Binding, also ist es nicht wirklich MVVM, aber wir haben die Prinzipien von MVVM beachtet.
 
-
-
 ## TODOS
 - [ ] Schmiedls Folien lesen und versteheeen
 - [X] Dokumentationsdokument finishen mit aktuellsten Diagrammen
-- [ ] Seine Email checken & Stichworte hier im File notieren
-- [ ] Unterschiede zwischen den Models ausm Unterricht
+- [X] Seine Email checken & Stichworte hier im File notieren
+- [X] Unterschiede zwischen den Models ausm Unterricht
 
 ## Mögliche Theoriefragen aus Folien:
 - Was ist der Unterschied zwischen Domain Model & Transaction Script? `Folien 5`

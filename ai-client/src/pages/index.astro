@@ -1,22 +1,8 @@
 ---
-import {PromptCard} from '../components/PromptCard.tsx';
-import Layout from '../layouts/Layout.astro';
-import {promptsApi} from '../lib/api.ts';
-
-const prompts = await promptsApi.getAllPrompts();
+import AuthLayout from '../layouts/AuthLayout.astro';
+import { Auth as AuthComponent } from "../components/auth/Auth.tsx"
 ---
-<!-- all prompts are displayed on the homepage, getPrompts is returning an array of prompts -->
-<!-- page can be viewed even if user is not logged in -->
-<Layout>
-    <main class="flex flex-col items-center min-h-screen p-4 space-y-2">
-        {prompts.length === 0 ? (
-            <p class="text-gray-500 mt-10">No prompts available yet.</p>
-            ) : (
-            prompts.map((prompt) => (
-                <div class="w-full">
-                <PromptCard client:only="react" prompt={prompt}/>
-                </div>
-        )))
-        }
-    </main>
-</Layout>
+<!--auth page for login/register-->
+<AuthLayout>
+    <AuthComponent client:load />
+</AuthLayout>

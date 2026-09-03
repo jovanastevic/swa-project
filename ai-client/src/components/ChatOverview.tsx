@@ -1,6 +1,5 @@
 import {
     Card,
-    CardContent,
     CardDescription, CardFooter,
     CardHeader,
     CardTitle,
@@ -65,6 +64,7 @@ export function ChatOverview() {
 
     return (
         <main className="flex flex-col items-center min-h-screen p-4 space-y-2">
+            <h2 className="text-2xl font-semibold">Chat-Overview</h2>
             {chatList}
         </main>
     );

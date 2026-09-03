@@ -12,7 +12,7 @@ export function Header() {
     return (
         <header className="w-full h-18 flex items-center border-b justify-between p-3">
             <div className="flex items-center">
-                <a href="/#">
+                <a href="/home">
                     <img src={logoLight.src} alt="Logo" className="h-8 w-auto hidden dark:block"/>
                     <img src={logo.src} alt="Logo" className="h-8 w-auto block dark:hidden"/>
                 </a>
@@ -27,7 +27,7 @@ export function Header() {
                 </a>
                 <ModeToggle/>
                 { isLoggedIn ? <UserAvatar/> : <a
-                    href="/auth"
+                    href="/"
                     className={buttonVariants()}
                 >
                     Login

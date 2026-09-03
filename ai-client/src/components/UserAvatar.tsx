@@ -5,7 +5,6 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -25,7 +24,7 @@ export function UserAvatar() {
         } finally {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("username");
-            window.location.href = "/auth";
+            window.location.href = "/";
         }
     }
 

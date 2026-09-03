@@ -60,7 +60,7 @@ export function useAuthForm() {
         const userData = await authApi.loginUser({ userLogin: payload });
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("username", formData.username);
-        window.location.href = "/";
+        window.location.href = "/home";
     };
 
     const register = async () => {

@@ -19,6 +19,6 @@ React hat One Way Data Binding, also ist es nicht wirklich MVVM, aber wir haben 
 
 ## TODOS
 - [ ] Schmiedls Folien lesen und versteheeen
-- [ ] Dokumentationsdokument finishen mit aktuellsten Diagrammen
+- [X] Dokumentationsdokument finishen mit aktuellsten Diagrammen
 - [ ] Seine Email checken & Stichworte hier im File notieren
 - [ ] Unterschiede zwischen den Models ausm Unterricht
